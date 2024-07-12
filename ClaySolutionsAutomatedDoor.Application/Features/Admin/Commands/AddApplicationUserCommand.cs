@@ -97,7 +97,6 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.Admin.Commands
             {
                 DateCreated = DateTime.Now,
                 ActorId = createdBy,
-                IsSuccessful = true,
                 Notes = notes,
             };
         }

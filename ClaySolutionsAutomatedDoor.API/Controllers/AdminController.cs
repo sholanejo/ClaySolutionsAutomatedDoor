@@ -1,8 +1,11 @@
-﻿using ClaySolutionsAutomatedDoor.Application.Features.Admin.Commands;
+﻿using ClaySolutionsAutomatedDoor.API.Utility;
+using ClaySolutionsAutomatedDoor.Application.Common.Models;
+using ClaySolutionsAutomatedDoor.Application.Features.Admin.Commands;
 using ClaySolutionsAutomatedDoor.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace ClaySolutionsAutomatedDoor.API.Controllers
 {
@@ -27,15 +30,14 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// <response code="403">If caller does not have the permission to create user.</response>
         [HttpPost]
         [Route("create-user")]
-        //[Authorize(Policy = "UserCreation")]
-        [AllowAnonymous]
+        [Authorize(Policy = "UserCreation")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult> AddUser([FromBody] AddNewUserDto addNewUserRequest)
         {
-            //var createdBy = User.Identity.GetUserId();
-            var createdBy = "E586519F-A3D5-4283-BCE5-2292794B4C13";
+            var createdBy = User.Identity.GetUserId();
 
             var command = new AddApplicationUserCommand
             {
