@@ -18,7 +18,7 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Extensions
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddIdentityCore<ApplicationUser>(options =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(60);
                 options.Lockout.MaxFailedAccessAttempts = 3;
@@ -32,9 +32,7 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Extensions
                 options.SignIn.RequireConfirmedEmail = true;
             })
                .AddEntityFrameworkStores<AutomatedDoorDbContext>()
-               .AddRoleManager<RoleManager<IdentityRole>>()
-               .AddRoles<IdentityRole>()
-               .AddEntityFrameworkStores<AutomatedDoorDbContext>();
+               .AddDefaultTokenProviders();
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             var serverVersion = new MySqlServerVersion(new Version(8, 0, 38));
@@ -46,8 +44,6 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Extensions
             services.AddScoped<IDoorAccessControlGroupRepository, DoorAccessControlGroupRepository>();
             services.AddScoped<IDoorPermissionRepository, DoorPermissionRepository>();
             services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
-
-            services.AddAuthorization();
 
             var bearerTokenConfig = configuration.GetSection(BearerTokenConfiguration.SectionName).Get<BearerTokenConfiguration>();
             services.AddAuthentication(authenticationOptions =>

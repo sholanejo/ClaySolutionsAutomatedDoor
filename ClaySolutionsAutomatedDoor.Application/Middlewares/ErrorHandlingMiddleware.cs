@@ -26,6 +26,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Middlewares
             }
             catch (Exception ex)
             {
+
                 if (ex is InvalidOperationException invalidOperationException)
                 {
                     _logger.LogInformation(invalidOperationException, invalidOperationException.Message);
@@ -48,8 +49,8 @@ namespace ClaySolutionsAutomatedDoor.Application.Middlewares
                     var responseObject = new BaseResponse<object>
                     {
                         Status = false,
-                        Message = GetValidationErrors(validationException),
-                        StatusCode = 400
+                        Message = ex.Message,
+                        StatusCode = StatusCodes.Status400BadRequest
                     };
 
                     var json = JsonSerializer.Serialize(responseObject);
@@ -77,7 +78,6 @@ namespace ClaySolutionsAutomatedDoor.Application.Middlewares
 
             }
         }
-
         private string GetValidationErrors(ValidationException ex)
         {
             return string.Join(",", ex.Errors.SelectMany(e => e.ErrorMessage));

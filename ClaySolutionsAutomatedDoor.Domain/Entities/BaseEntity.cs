@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClaySolutionsAutomatedDoor.Domain.Entities
 {
@@ -10,6 +11,7 @@ namespace ClaySolutionsAutomatedDoor.Domain.Entities
         /// <summary>
         /// Gets or sets the unique identifier for the entities.
         /// </summary>
+        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 

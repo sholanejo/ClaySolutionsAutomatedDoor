@@ -44,7 +44,9 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Data
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
             IsActive = true,
-            DoorAccessControlGroupId = RestrictedDoorAccessControlGroupId
+            DoorAccessControlGroupId = RestrictedDoorAccessControlGroupId,
+            CreatedBy = "E586519F-A3D5-4283-BCE5-2292794B4C13",
+            CreatedDate = DateTime.Now
         };
 
         static ApplicationUser Director = new()
@@ -56,7 +58,9 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Data
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
             IsActive = true,
-            DoorAccessControlGroupId = GeneralDoorAccessControlGroupId
+            DoorAccessControlGroupId = GeneralDoorAccessControlGroupId,
+            CreatedBy = "E586519F-A3D5-4283-BCE5-2292794B4C13",
+            CreatedDate = DateTime.Now
         };
 
         static ApplicationUser Employee = new()
@@ -68,7 +72,9 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Data
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
             IsActive = true,
-            DoorAccessControlGroupId = GeneralDoorAccessControlGroupId
+            DoorAccessControlGroupId = GeneralDoorAccessControlGroupId,
+            CreatedBy = "E586519F-A3D5-4283-BCE5-2292794B4C13",
+            CreatedDate = DateTime.Now
         };
 
         static ApplicationUser InActiveUser = new()
@@ -80,7 +86,9 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Data
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
             IsActive = false,
-            DoorAccessControlGroupId = GeneralDoorAccessControlGroupId
+            DoorAccessControlGroupId = GeneralDoorAccessControlGroupId,
+            CreatedBy = "E586519F-A3D5-4283-BCE5-2292794B4C13",
+            CreatedDate = DateTime.Now
         };
         #endregion
 
@@ -147,8 +155,6 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Data
 
                 await userManager.AddToRoleAsync(InActiveUser, Roles.RegularUser.ToString());
             }
-
-            //seed claims for director
         }
 
         private static async Task AddClaimsForAdminUser(this RoleManager<IdentityRole> roleManager)
