@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\Configurations\" />
+    <Folder Include="Common\Validators\" />
+    <Folder Include="Features\Admin\Commands\" />
+    <Folder Include="Features\Admin\Queries\" />
+    <Folder Include="Features\Door\Commands\" />
+    <Folder Include="Features\Door\Queries\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.5.1" />
+    <PackageReference Include="MediatR" Version="12.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Serilog" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ClaySolutionsAutomatedDoor.Domain\ClaySolutionsAutomatedDoor.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
