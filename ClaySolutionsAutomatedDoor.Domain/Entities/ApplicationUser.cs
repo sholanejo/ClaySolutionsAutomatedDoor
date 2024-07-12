@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClaySolutionsAutomatedDoor.Domain.Entities
 {
@@ -7,6 +9,9 @@ namespace ClaySolutionsAutomatedDoor.Domain.Entities
     /// </summary>
     public class ApplicationUser : IdentityUser
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public override string Id { get; set; }
         /// <summary>
         /// The user's first name.
         /// </summary>

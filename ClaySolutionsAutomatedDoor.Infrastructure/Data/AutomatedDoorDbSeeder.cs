@@ -24,7 +24,7 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Data
                 await AddDefaultUsers.AddOfficeManagerAsync(userManager, roleManager);
                 await AddDefaultUsers.AddDirectorAsync(userManager, roleManager);
 
-                Log.Logger.Information("Data seeding data completed successfully...");
+                Log.Logger.Information("Data seeding completed successfully...");
             }
         }
     }

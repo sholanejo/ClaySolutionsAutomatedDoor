@@ -7,9 +7,6 @@ namespace ClaySolutionsAutomatedDoor.API.Extensions
     {
         public static IServiceCollection AddApiServices(this IServiceCollection services, WebApplicationBuilder builder)
         {
-            services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
-            services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
-
             services.AddCors(options =>
             {
                 options.AddPolicy("corsPolicy", corsOption =>
@@ -26,6 +23,9 @@ namespace ClaySolutionsAutomatedDoor.API.Extensions
                     }); // allow any origin
                 });
             });
+
+            services.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
+            services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
             return services;
         }
     }

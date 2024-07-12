@@ -16,5 +16,13 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Persistence
         public DbSet<DoorAccessControlGroup> DoorAccessControlGroup { get; set; }
         public DbSet<DoorPermission> DoorPermission { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Apply all configurations from the current assembly
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AutomatedDoorDbContext).Assembly);
+        }
+
     }
 }
