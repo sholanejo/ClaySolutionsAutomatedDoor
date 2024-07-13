@@ -12,7 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace ClaySolutionsAutomatedDoor.Application.Features.Account.Commands
+namespace ClaySolutionsAutomatedDoor.Application.Features.AccountFeatures.Commands
 {
     public class LoginCommand : IRequest<BaseResponse<LoginResponseDto>>
     {

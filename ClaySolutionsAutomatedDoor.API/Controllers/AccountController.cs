@@ -1,5 +1,5 @@
 ﻿using ClaySolutionsAutomatedDoor.Application.Common.Models;
-using ClaySolutionsAutomatedDoor.Application.Features.Account.Commands;
+using ClaySolutionsAutomatedDoor.Application.Features.AccountFeatures.Commands;
 using ClaySolutionsAutomatedDoor.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace ClaySolutionsAutomatedDoor.Application.Features.DoorAccessControl.Commands
+namespace ClaySolutionsAutomatedDoor.Application.Features.DoorAccessControlFeatures.Commands
 {
     public class AddAccessControlGroupCommand : IRequest<BaseResponse>
     {
@@ -18,7 +18,9 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.DoorAccessControl.Comm
     {
         public async Task<BaseResponse> Handle(AddAccessControlGroupCommand request, CancellationToken cancellationToken)
         {
-            var doorAccessControlGroup = await _unitOfWorkRepository.DoorAccessControlGroupRepository.GetDoorAccessControlGroupByName(request.GroupName);
+            var doorAccessControlGroup = await _unitOfWorkRepository
+                .DoorAccessControlGroupRepository
+                .GetSingleAsync(x => x.GroupName.ToLower().Equals(request.GroupName));
             if (doorAccessControlGroup is not null)
             {
                 _logger.LogWarning("Door Access control group cannot be added because the name : {0} already exists", request.GroupName);

@@ -1,4 +1,4 @@
-﻿using ClaySolutionsAutomatedDoor.Application.Features.Account.Commands;
+﻿using ClaySolutionsAutomatedDoor.Application.Features.AccountFeatures.Commands;
 using FluentValidation;
 
 namespace ClaySolutionsAutomatedDoor.Application.Common.Validators
