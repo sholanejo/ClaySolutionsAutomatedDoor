@@ -26,11 +26,11 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.Admin.Commands
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUnitOfWorkRepository _unitOfWorkRepository;
-        private readonly ILogger _logger;
+        private readonly ILogger<AddApplicationUserCommandHandler> _logger;
 
         public AddApplicationUserCommandHandler(UserManager<ApplicationUser> userManager,
             IUnitOfWorkRepository unitOfWorkRepository,
-            ILogger logger)
+            ILogger<AddApplicationUserCommandHandler> logger)
         {
             _userManager = userManager;
             _unitOfWorkRepository = unitOfWorkRepository;
@@ -40,6 +40,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.Admin.Commands
 
         public async Task<BaseResponse> Handle(AddApplicationUserCommand request, CancellationToken cancellationToken)
         {
+            request.Email = request.Email.Trim();
             if (await DoesUserExist(request.Email) is false)
             {
                 _logger.LogWarning("User with email {0} cannot be added as the user already exists", request.Email);

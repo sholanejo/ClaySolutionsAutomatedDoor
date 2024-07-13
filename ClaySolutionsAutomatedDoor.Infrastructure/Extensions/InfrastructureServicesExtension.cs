@@ -1,6 +1,6 @@
 ﻿using ClaySolutionsAutomatedDoor.Application.Common.Repositories;
+using ClaySolutionsAutomatedDoor.Domain.Configurations;
 using ClaySolutionsAutomatedDoor.Domain.Entities;
-using ClaySolutionsAutomatedDoor.Infrastructure.Configurations;
 using ClaySolutionsAutomatedDoor.Infrastructure.Persistence;
 using ClaySolutionsAutomatedDoor.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -29,7 +29,7 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Extensions
                 options.Password.RequireUppercase = true;
                 options.Password.RequireDigit = true;
                 options.SignIn.RequireConfirmedAccount = false;
-                options.SignIn.RequireConfirmedEmail = true;
+                options.SignIn.RequireConfirmedEmail = false;
             })
                .AddEntityFrameworkStores<AutomatedDoorDbContext>()
                .AddDefaultTokenProviders();
@@ -44,6 +44,8 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Extensions
             services.AddScoped<IDoorAccessControlGroupRepository, DoorAccessControlGroupRepository>();
             services.AddScoped<IDoorPermissionRepository, DoorPermissionRepository>();
             services.AddScoped<IUnitOfWorkRepository, UnitOfWorkRepository>();
+
+            services.Configure<BearerTokenConfiguration>(configuration.GetSection(BearerTokenConfiguration.SectionName));
 
             var bearerTokenConfig = configuration.GetSection(BearerTokenConfiguration.SectionName).Get<BearerTokenConfiguration>();
             services.AddAuthentication(authenticationOptions =>
