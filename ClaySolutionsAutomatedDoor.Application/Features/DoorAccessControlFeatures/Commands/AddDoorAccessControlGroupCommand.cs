@@ -7,16 +7,16 @@ using Microsoft.Extensions.Logging;
 
 namespace ClaySolutionsAutomatedDoor.Application.Features.DoorAccessControlFeatures.Commands
 {
-    public class AddAccessControlGroupCommand : IRequest<BaseResponse>
+    public class AddDoorAccessControlGroupCommand : IRequest<BaseResponse>
     {
         public string GroupName { get; set; }
         public string ActorId { get; set; }
     }
 
     public class AddAccessControlGroupCommandHandler(ILogger<AddAccessControlGroupCommandHandler> _logger,
-        IUnitOfWorkRepository _unitOfWorkRepository) : IRequestHandler<AddAccessControlGroupCommand, BaseResponse>
+        IUnitOfWorkRepository _unitOfWorkRepository) : IRequestHandler<AddDoorAccessControlGroupCommand, BaseResponse>
     {
-        public async Task<BaseResponse> Handle(AddAccessControlGroupCommand request, CancellationToken cancellationToken)
+        public async Task<BaseResponse> Handle(AddDoorAccessControlGroupCommand request, CancellationToken cancellationToken)
         {
             var doorAccessControlGroup = await _unitOfWorkRepository
                 .DoorAccessControlGroupRepository
@@ -41,7 +41,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.DoorAccessControlFeatu
             return BaseResponse.PassedResponse(Constants.ApiOkMessage, StatusCodes.Status201Created);
         }
 
-        private DoorAccessControlGroup _BuildDoorAccessControlGroup(AddAccessControlGroupCommand request)
+        private DoorAccessControlGroup _BuildDoorAccessControlGroup(AddDoorAccessControlGroupCommand request)
         {
             return new DoorAccessControlGroup()
             {

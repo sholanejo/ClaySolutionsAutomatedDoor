@@ -1,6 +1,6 @@
 ﻿using ClaySolutionsAutomatedDoor.Application.Common.Models;
 using ClaySolutionsAutomatedDoor.Application.Common.Repositories;
-using ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands;
+using ClaySolutionsAutomatedDoor.Application.Features.Admin.Commands;
 using ClaySolutionsAutomatedDoor.Domain.Entities;
 using ClaySolutionsAutomatedDoor.Test.Shared;
 using Microsoft.AspNetCore.Http;
@@ -82,7 +82,7 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
 
             //assert
             result.Status.ShouldBe(false);
-            result.Message.ShouldBe(Constants.DoorAccessGroupNotFoundMessage);
+            result.Message.ShouldBe(Constants.DoorAccessControlGroupNotFoundMessage);
             result.StatusCode.ShouldBe((int)StatusCodes.Status400BadRequest);
         }
 

@@ -51,7 +51,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands
             if (doorControlAccessGroup is null)
             {
                 _logger.LogWarning("Door access control group with id {0} was not found", request.DoorAccessControlGroupId);
-                return BaseResponse.FailedResponse(Constants.DoorAccessGroupNotFoundMessage, StatusCodes.Status400BadRequest);
+                return BaseResponse.FailedResponse(Constants.DoorAccessControlGroupNotFoundMessage, StatusCodes.Status400BadRequest);
             }
 
             _logger.LogInformation("Building object properties for adding new user...");
