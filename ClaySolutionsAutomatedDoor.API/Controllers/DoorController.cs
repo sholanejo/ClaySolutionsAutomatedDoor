@@ -31,7 +31,7 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// <response code="201">When the door is successfully created</response>
         /// <response code="401">If jwt token provided is invalid.</response>
         /// <response code="403">If caller does not have the permission to create user.</response>
-        /// <response code="403">If the door already exists.</response>
+        /// <response code="409">If the door already exists.</response>
         [HttpPost]
         [Authorize]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Created)]

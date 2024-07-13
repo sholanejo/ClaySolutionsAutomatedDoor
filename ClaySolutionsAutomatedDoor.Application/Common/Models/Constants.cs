@@ -3,7 +3,7 @@
     public class Constants
     {
         public const string UserAlreadyExistsMessage = "User already exist. Please proceed to login";
-        public const string DoorAccessGroupNotFoundMessage = "The access group specified was not found";
+        public const string DoorAccessControlGroupNotFoundMessage = "The access control group specified was not found";
         public const string NewUserAddedMessage = "New User has been added with email address {0}";
         public const string ApiOkMessage = "Success";
         public const string FailedLoginAttemptMessage = "Your email address or password is invalid";
@@ -13,7 +13,10 @@
         public const string LoginSuccessfulMessage = "Login Successful";
         public const string AddDoorAccessGroupFailureMessage = "Door access control group could not be added because a matching name was found";
         public const string DoorAccessGroupActivityMessage = "New door access control group with name {0} has been added";
-        public const string AddDoorMessage = "New door with name \"{0}\" has been added";
+        public const string AddDoorMessage = "New door with name {0} has been added";
         public const string DoorAlreadyExistMessage = "Door with name {0} already exists";
+        public const string DoorDoesNotExistMessage = "The Door specified was not found";
+        public const string DoorAlreadyAddedToGroupExistMessage = "The Door is already added to specified group";
+        public const string DoorAddedToGroupMessage = "The Door is successfully added to {0} group";
     }
 }

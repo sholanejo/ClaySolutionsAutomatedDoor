@@ -71,10 +71,39 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         {
             var createdBy = User.Identity.GetUserId();
 
-            var command = new AddAccessControlGroupCommand
+            var command = new AddDoorAccessControlGroupCommand
             {
                 GroupName = request.GroupName,
                 ActorId = createdBy,
+            };
+
+            var result = await _sender.Send(command);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        /// <summary>
+        /// Assigns a door to an access control group
+        /// This will additionally log the activity.
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="201">When the user is successfully created</response>
+        /// <response code="401">If jwt token provided is invalid.</response>
+        /// <response code="403">If caller does not have the permission to create user.</response>
+        [HttpPost]
+        [Route("door-to-access-control-group")]
+        [Authorize]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
+        public async Task<ActionResult> AddDoorPermission([FromBody] AddDoorPermissionDto request)
+        {
+            var createdBy = User.Identity.GetUserId();
+
+            var command = new AddDoorToDoorAccessControlGroupCommand
+            {
+                DoorAccessControlGroupId = request.DoorAccessControlGroupId,
+                CreatedBy = createdBy,
+                DoorId = request.DoorId,
             };
 
             var result = await _sender.Send(command);
