@@ -1,4 +1,4 @@
-﻿using ClaySolutionsAutomatedDoor.Application.Features.Admin.Commands;
+﻿using ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands;
 using ClaySolutionsAutomatedDoor.Domain.Entities;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;

@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Admin\Queries\" />
-    <Folder Include="Features\Door\Queries\" />
+    <Compile Remove="Features\Admin\**" />
+    <Compile Remove="Features\Door\**" />
+    <EmbeddedResource Remove="Features\Admin\**" />
+    <EmbeddedResource Remove="Features\Door\**" />
+    <None Remove="Features\Admin\**" />
+    <None Remove="Features\Door\**" />
   </ItemGroup>
 
   <ItemGroup>

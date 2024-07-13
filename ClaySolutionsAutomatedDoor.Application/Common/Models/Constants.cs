@@ -13,5 +13,7 @@
         public const string LoginSuccessfulMessage = "Login Successful";
         public const string AddDoorAccessGroupFailureMessage = "Door access control group could not be added because a matching name was found";
         public const string DoorAccessGroupActivityMessage = "New door access control group with name {0} has been added";
+        public const string AddDoorMessage = "New door with name \"{0}\" has been added";
+        public const string DoorAlreadyExistMessage = "Door with name {0} already exists";
     }
 }

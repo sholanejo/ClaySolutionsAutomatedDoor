@@ -1,6 +1,6 @@
 ﻿using ClaySolutionsAutomatedDoor.Application.Common.Models;
 using ClaySolutionsAutomatedDoor.Application.Common.Repositories;
-using ClaySolutionsAutomatedDoor.Application.Features.Admin.Commands;
+using ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands;
 using ClaySolutionsAutomatedDoor.Domain.Entities;
 using ClaySolutionsAutomatedDoor.Test.Shared;
 using Microsoft.AspNetCore.Http;

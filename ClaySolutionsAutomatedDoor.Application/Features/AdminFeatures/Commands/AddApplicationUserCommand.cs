@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Transactions;
 
-namespace ClaySolutionsAutomatedDoor.Application.Features.Admin.Commands
+namespace ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands
 {
     public class AddApplicationUserCommand : IRequest<BaseResponse>
     {
