@@ -16,8 +16,8 @@ namespace ClaySolutionsAutomatedDoor.Domain.Entities
         /// <summary>
         /// Gets or sets the user involved in creating the activity.
         /// </summary>
-        [Column("created_by")]
-        public string ActorId { get; set; } = string.Empty;
+        [Column("performed_by")]
+        public string PerformedBy { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the date and time the entity was created.

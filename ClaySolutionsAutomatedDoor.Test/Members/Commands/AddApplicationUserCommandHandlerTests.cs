@@ -15,7 +15,7 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
     {
         private readonly Mock<UserManager<ApplicationUser>> _mockUserManager;
         private readonly Mock<IUnitOfWorkRepository> _mockUnitOfWorkRepository;
-        private readonly Mock<ILogger> _mockLogger = new();
+        private readonly Mock<ILogger<AddApplicationUserCommandHandler>> _mockLogger = new();
         private readonly Mock<IDoorAccessControlGroupRepository> _mockDoorAccessGroup = new();
         private readonly Mock<IAuditTrailRepository> _mockAuditTrail = new();
 
@@ -112,7 +112,7 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
 
             //assert
             result.Status.ShouldBe(true);
-            result.Message.ShouldBe(Constants.Api200OkMessage);
+            result.Message.ShouldBe(Constants.ApiOkMessage);
             result.StatusCode.ShouldBe((int)StatusCodes.Status201Created);
         }
     }

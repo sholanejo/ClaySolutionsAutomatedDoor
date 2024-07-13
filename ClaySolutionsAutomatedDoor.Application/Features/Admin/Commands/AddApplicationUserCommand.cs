@@ -77,7 +77,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.Admin.Commands
             scope.Complete();
 
             _logger.LogInformation("User with email {0} was successfully created", request.Email);
-            return BaseResponse.PassedResponse(Constants.Api200OkMessage, StatusCodes.Status201Created);
+            return BaseResponse.PassedResponse(Constants.ApiOkMessage, StatusCodes.Status201Created);
         }
 
         private async Task<bool> DoesUserExist(string email)
@@ -106,7 +106,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.Admin.Commands
             return new AuditTrail
             {
                 DateCreated = DateTime.Now,
-                ActorId = createdBy,
+                PerformedBy = createdBy,
                 Notes = notes,
             };
         }

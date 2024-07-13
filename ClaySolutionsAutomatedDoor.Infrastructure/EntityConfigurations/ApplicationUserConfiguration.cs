@@ -16,7 +16,7 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.EntityConfigurations
 
             builder.HasMany(au => au.AuditTrail)
                 .WithOne(at => at.User)
-                .HasForeignKey(at => at.ActorId);
+                .HasForeignKey(at => at.PerformedBy);
         }
     }
 }
