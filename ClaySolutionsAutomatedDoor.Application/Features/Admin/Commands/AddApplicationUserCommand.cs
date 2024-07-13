@@ -6,8 +6,9 @@ using ClaySolutionsAutomatedDoor.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System.Transactions;
-
 
 namespace ClaySolutionsAutomatedDoor.Application.Features.Admin.Commands
 {
@@ -25,12 +26,15 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.Admin.Commands
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IUnitOfWorkRepository _unitOfWorkRepository;
+        private readonly ILogger _logger;
 
         public AddApplicationUserCommandHandler(UserManager<ApplicationUser> userManager,
-            IUnitOfWorkRepository unitOfWorkRepository)
+            IUnitOfWorkRepository unitOfWorkRepository,
+            ILogger logger)
         {
             _userManager = userManager;
             _unitOfWorkRepository = unitOfWorkRepository;
+            _logger = logger;
         }
 
 
@@ -38,24 +42,29 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.Admin.Commands
         {
             if (await DoesUserExist(request.Email) is false)
             {
+                _logger.LogWarning("User with email {0} cannot be added as the user already exists", request.Email);
                 return BaseResponse.FailedResponse(Constants.UserAlreadyExistsMessage, StatusCodes.Status409Conflict);
             }
 
             var doorControlAccessGroup = await _unitOfWorkRepository.DoorAccessControlGroupRepository.GetByIdAsync(request.DoorAccessControlGroupId);
             if (doorControlAccessGroup is null)
             {
+                _logger.LogWarning("Door access control group with id {0} was not found", request.DoorAccessControlGroupId);
                 return BaseResponse.FailedResponse(Constants.DoorAccessGroupNotFoundMessage, StatusCodes.Status400BadRequest);
             }
 
+            _logger.LogInformation("Building object properties for adding new user...");
             var newUser = BuildAppUser(request);
             var notes = string.Format(Constants.NewUserAddedMessage, request.Email);
             var auditTrail = BuildAuditTrail(request.CreatedBy, notes);
+            _logger.LogInformation("Building object properties for adding new user completed");
 
             using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
             var result = await _userManager.CreateAsync(newUser, request.Password);
             if (!result.Succeeded)
             {
+                _logger.LogError("Unable to create new user with email {0} due to : {1}", request.Email, JsonConvert.SerializeObject(result.Errors));
                 scope.Dispose();
                 return BaseResponse.FailedResponse(ValidationResult.GetIdentityResultErrors(result), StatusCodes.Status500InternalServerError);
             }
@@ -66,9 +75,9 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.Admin.Commands
 
             scope.Complete();
 
+            _logger.LogInformation("User with email {0} was successfully created", request.Email);
             return BaseResponse.PassedResponse(Constants.Api200OkMessage, StatusCodes.Status201Created);
         }
-
 
         private async Task<bool> DoesUserExist(string email)
         {

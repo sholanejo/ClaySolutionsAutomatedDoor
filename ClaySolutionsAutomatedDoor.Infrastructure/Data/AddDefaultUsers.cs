@@ -10,8 +10,8 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Data
     public static class AddDefaultUsers
     {
         private const string Password = "StrongPassword1$";
-        private static Guid GeneralDoorAccessControlGroupId = Guid.Parse("1E4993B3-8B6C-40FC-8C68-B31FD3E8C5A4");
-        private static Guid RestrictedDoorAccessControlGroupId = Guid.Parse("5CB3E7C8-FBDA-4D86-AB2D-1111A8D0E4C0");
+        private static readonly Guid GeneralDoorAccessControlGroupId = Guid.Parse("1E4993B3-8B6C-40FC-8C68-B31FD3E8C5A4");
+        private static readonly Guid RestrictedDoorAccessControlGroupId = Guid.Parse("5CB3E7C8-FBDA-4D86-AB2D-1111A8D0E4C0");
 
         #region Door Access Control Groups
 
@@ -141,8 +141,6 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Data
 
                 await userManager.AddToRoleAsync(Employee, Roles.RegularUser.ToString());
             }
-
-            //seed claims for director
         }
 
         public static async Task AddInActiveUser(UserManager<ApplicationUser> userManager,
