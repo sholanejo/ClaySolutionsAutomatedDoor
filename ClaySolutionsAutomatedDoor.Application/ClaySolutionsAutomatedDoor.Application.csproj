@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Features\Admin\Queries\" />
-    <Folder Include="Features\Door\Commands\" />
     <Folder Include="Features\Door\Queries\" />
   </ItemGroup>
 

@@ -107,12 +107,11 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.Account.Commands
             var expiry = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_bearerTokenConfig.Value.ExpiryMinutes));
 
             var token = new JwtSecurityToken(
-                _bearerTokenConfig.Value.Issuer,
-                _bearerTokenConfig.Value.Audience,
-                claims,
-                expiry,
-                DateTime.Now,
-                signingCredentials
+                issuer: _bearerTokenConfig.Value.Issuer,
+                audience: _bearerTokenConfig.Value.Audience,
+                claims: claims,
+                expires: expiry,
+               signingCredentials: signingCredentials
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);

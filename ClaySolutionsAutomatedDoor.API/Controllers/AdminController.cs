@@ -1,6 +1,7 @@
 ﻿using ClaySolutionsAutomatedDoor.API.Utility;
 using ClaySolutionsAutomatedDoor.Application.Common.Models;
 using ClaySolutionsAutomatedDoor.Application.Features.Admin.Commands;
+using ClaySolutionsAutomatedDoor.Application.Features.DoorAccessControl.Commands;
 using ClaySolutionsAutomatedDoor.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -46,6 +47,34 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
                 FirstName = addNewUserRequest.FirstName,
                 LastName = addNewUserRequest.LastName,
                 Password = addNewUserRequest.Password,
+            };
+
+            var result = await _sender.Send(command);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        /// <summary>
+        /// Creates a door access control group
+        /// This will additionally log the activity.
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="201">When the user is successfully created</response>
+        /// <response code="401">If jwt token provided is invalid.</response>
+        /// <response code="403">If caller does not have the permission to create user.</response>
+        [HttpPost]
+        [Route("door-access-control-group")]
+        [Authorize]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
+        public async Task<ActionResult> AddDoorAccessControlGroup([FromBody] AddAccessControlGroupDto request)
+        {
+            var createdBy = User.Identity.GetUserId();
+
+            var command = new AddAccessControlGroupCommand
+            {
+                GroupName = request.GroupName,
+                ActorId = createdBy,
             };
 
             var result = await _sender.Send(command);
