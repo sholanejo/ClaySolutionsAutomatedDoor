@@ -31,10 +31,9 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         [HttpPost]
         [Route("create-user")]
         [Authorize(Policy = "UserCreation")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Created)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
         public async Task<ActionResult> AddUser([FromBody] AddNewUserDto addNewUserRequest)
         {
             var createdBy = User.Identity.GetUserId();
