@@ -1,6 +1,8 @@
 ﻿using ClaySolutionsAutomatedDoor.API.Utility;
 using ClaySolutionsAutomatedDoor.Application.Common.Models;
+using ClaySolutionsAutomatedDoor.Application.Common.Utility;
 using ClaySolutionsAutomatedDoor.Application.Features.DoorFeatures.Commands;
+using ClaySolutionsAutomatedDoor.Application.Features.DoorFeatures.Queries;
 using ClaySolutionsAutomatedDoor.Domain.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -54,6 +56,82 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         }
 
 
+        /// <summary>
+        /// Opens a door 
+        /// This will additionally log the activity.
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">When the door is successfully opened</response>
+        /// <response code="401">If jwt token provided is invalid.</response>
+        /// <response code="403">If caller does not have the permission to open door.</response>
+        [HttpPost]
+        [Route("open-door")]
+        [Authorize]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
+        public async Task<ActionResult> OpenDoor([FromBody] OpenDoorCommand command)
+        {
+            var result = await _sender.Send(command);
+            return StatusCode(result.StatusCode, result);
+        }
 
+        /// <summary>
+        /// Close a door 
+        /// This will additionally log the activity.
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">When the door is successfully closed</response>
+        /// <response code="401">If jwt token provided is invalid.</response>
+        /// <response code="403">If caller does not have the permission to close door.</response>
+        [HttpPost]
+        [Route("close-door")]
+        [Authorize]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
+        public async Task<ActionResult> CloseDoor([FromBody] CloseDoorCommand command)
+        {
+            var result = await _sender.Send(command);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        /// <summary>
+        /// Get a door 
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">When the door is returned</response>
+        /// <response code="401">If jwt token provided is invalid.</response>
+        /// <response code="403">If caller does not have the permission to get door.</response>
+        [HttpGet]
+        [Authorize]
+        [Route("{DoorId}")]
+        [ProducesResponseType(typeof(BaseResponse<DoorDto>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BaseResponse<DoorDto>), (int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(BaseResponse<DoorDto>), (int)HttpStatusCode.Forbidden)]
+        public async Task<ActionResult> GetDoor([FromRoute] GetSingleDoorQuery query)
+        {
+            var result = await _sender.Send(query);
+            return StatusCode(result.StatusCode, result);
+        }
+
+        /// <summary>
+        /// Get all doors 
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">When the doors are returned</response>
+        /// <response code="401">If jwt token provided is invalid.</response>
+        /// <response code="403">If caller does not have the permission to get door.</response>
+        [HttpGet]
+        [Route("doors")]
+        [Authorize]
+        [ProducesResponseType(typeof(BaseResponse<PaginatedParameter<DoorDto>>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BaseResponse<PaginatedParameter<DoorDto>>), (int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(BaseResponse<PaginatedParameter<DoorDto>>), (int)HttpStatusCode.Forbidden)]
+        public async Task<ActionResult> GetAllDoors([FromQuery] GetDoorsQuery query)
+        {
+            var result = await _sender.Send(query);
+            return StatusCode(result.StatusCode, result);
+        }
     }
 }
