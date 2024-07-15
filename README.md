@@ -30,10 +30,14 @@ There are 5 core entities for this project
 This project is built with CQRS Clean Architectural pattern. A pattern that separates read and update operations for a data store. Implementing CQRS in this application maximizes its performance, scalability, and security. This makes the code easier to manage and with better performance. It improves separates read and write operations, making the system more maintainable and scalable. Promotes a clean architecture by decoupling business logic from controllers.
 
 The project consists of 4 Layers
-- Api Layer -> The API contains endpoints that clients can call to perform operations like creating, reading, updating, and deleting resources.
-- Application Layer -> The Application Layer contains the business logic and orchestrates the interaction between the API layer and the Domain layer.
-- Domain Layer -> The Domain Layer encapsulates the core business logic and rules.
-- Infrasturcture Layer -> The Infrastructure Layer provides implementations for interactions with external systems and technologies, such as databases, etc.
+- # Api Layer ->
+- The API contains endpoints that clients can call to perform operations like creating, reading, updating, and deleting resources.
+- # Application Layer ->
+- The Application Layer contains the business logic and orchestrates the interaction between the API layer and the Domain layer.
+- # Domain Layer ->
+- The Domain Layer encapsulates the core business logic and rules.
+- # Infrasturcture Layer ->
+- The Infrastructure Layer provides implementations for interactions with external systems and technologies, such as databases, etc.
 
 
 ## Features
