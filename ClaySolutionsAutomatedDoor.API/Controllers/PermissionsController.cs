@@ -31,7 +31,7 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// <response code="403">If caller does not have the permission to get door.</response>
         [HttpGet]
         [Authorize(Roles = nameof(Roles.AdminUser))]
-        [Route("{UserId}")]
+        [Route("permissions/{UserId}")]
         [ProducesResponseType(typeof(BaseResponse<List<ClaimDto>>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse<List<ClaimDto>>), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse<List<ClaimDto>>), (int)HttpStatusCode.Forbidden)]

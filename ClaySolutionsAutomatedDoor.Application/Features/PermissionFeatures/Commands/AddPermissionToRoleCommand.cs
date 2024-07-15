@@ -39,5 +39,4 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.PermissionFeatures.Com
             return BaseResponse.PassedResponse(Constants.ApiOkMessage, StatusCodes.Status200OK);
         }
     }
-
 }

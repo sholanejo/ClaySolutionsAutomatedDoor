@@ -15,7 +15,6 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
     public class LoginCommandHandlerTests
     {
         private readonly Mock<UserManager<ApplicationUser>> _mockUserManager;
-        private readonly Mock<SignInManager<ApplicationUser>> _mockSignInManager;
         private readonly Mock<RoleManager<IdentityRole>> _mockRoleManager;
         private readonly Mock<ILogger<LoginCommandHandler>> _mockLogger = new();
         private readonly Mock<IOptions<BearerTokenConfiguration>> _mockBearerTokenConfig = new();
@@ -25,7 +24,6 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
         {
             _mockUserManager = MockHelpers.MockUserManager(TestData.TestUsers);
             _mockRoleManager = MockHelpers.MockRoleManager<IdentityRole>(TestData.TestRoles);
-            _mockSignInManager = MockHelpers.MockSignInManager(_mockUserManager);
         }
 
         [Fact]

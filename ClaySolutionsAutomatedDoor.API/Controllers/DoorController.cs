@@ -77,26 +77,6 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         }
 
         /// <summary>
-        /// Close a door 
-        /// This will additionally log the activity.
-        /// </summary>
-        /// <returns></returns>
-        /// <response code="200">When the door is successfully closed</response>
-        /// <response code="401">If jwt token provided is invalid.</response>
-        /// <response code="403">If caller does not have the permission to close door.</response>
-        [HttpPost]
-        [Route("close-door")]
-        [Authorize]
-        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
-        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
-        public async Task<ActionResult> CloseDoor([FromBody] CloseDoorCommand command)
-        {
-            var result = await _sender.Send(command);
-            return StatusCode(result.StatusCode, result);
-        }
-
-        /// <summary>
         /// Get a door 
         /// </summary>
         /// <returns></returns>
