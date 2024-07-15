@@ -1,6 +1,6 @@
-# Automated Door API - A system which allows users to open doors and show historical events to extend our user experience beyond classical tags
+# Automated Door API - A system which allows users to open doors and show historical events to extend user experience beyond classical tags
 
-An ASP.NET Web API which allows users to open doors and show historical events to extend users experience beyond classical tags
+An ASP.NET Web API which allows users to open doors and show historical events to extend users experience beyond classical tags.
 This repository contains the backend API implementation for the Automated Doors API.
 
 ## Table of Contents
