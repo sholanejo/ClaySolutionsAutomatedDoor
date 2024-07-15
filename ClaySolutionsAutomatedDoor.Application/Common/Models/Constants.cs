@@ -30,5 +30,6 @@
         public const string AttemptToCloseUnassignedDoor = "User attempted closing door not assigned";
         public const string OpenDoorSuccessMessage = "User Successfully opened door {0}";
         public const string CloseDoorSuccessMessage = "User Successfully closed door {0}";
+        public const string RoleNotFOundMessage = "Role was not found";
     }
 }

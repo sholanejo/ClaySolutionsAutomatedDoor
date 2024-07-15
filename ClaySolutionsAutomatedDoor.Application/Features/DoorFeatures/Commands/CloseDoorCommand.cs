@@ -37,6 +37,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.DoorFeatures.Commands
             var doorPermission = await _unitOfWorkRepository
                 .DoorPermissionRepository
                 .GetSingleAsync
+
                 (x => x.DoorAccessControlGroupId == applicationUser.DoorAccessControlGroupId && x.DoorId == request.DoorId);
 
             if (doorPermission is null)

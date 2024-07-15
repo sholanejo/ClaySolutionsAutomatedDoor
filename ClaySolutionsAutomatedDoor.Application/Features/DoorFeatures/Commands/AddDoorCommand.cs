@@ -22,7 +22,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.DoorFeatures.Commands
         {
             var door = await _unitOfWorkRepository
                 .DoorRepository
-                .GetSingleAsync(x => x.Name.ToLower().Equals(request.DoorName));
+                .GetSingleAsync(x => x.Name.ToLower() == request.DoorName.ToLower());
 
             if (door is not null)
             {
@@ -39,7 +39,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.DoorFeatures.Commands
 
             await _unitOfWorkRepository.CommitAsync();
 
-            return BaseResponse.PassedResponse(Constants.ApiOkMessage, StatusCodes.Status200OK);
+            return BaseResponse.PassedResponse(Constants.ApiOkMessage, StatusCodes.Status201Created);
         }
 
         private AuditTrail _BuildAuditTrail(string notes, string createdBy)

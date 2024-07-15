@@ -1,6 +1,7 @@
 ﻿using ClaySolutionsAutomatedDoor.API.AuthorizationRequirement;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace ClaySolutionsAutomatedDoor.API.Extensions
 {
@@ -34,6 +35,10 @@ namespace ClaySolutionsAutomatedDoor.API.Extensions
         {
             services.AddSwaggerGen(option =>
             {
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                option.IncludeXmlComments(xmlPath);
+
                 option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     Name = "Authorization",
@@ -43,7 +48,6 @@ namespace ClaySolutionsAutomatedDoor.API.Extensions
                     In = ParameterLocation.Header,
                     Description = "JWT Authorization header using the Bearer scheme",
                 });
-
 
                 option.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
