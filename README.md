@@ -88,9 +88,3 @@ The technology stack used in this project is as follows:
 - Swagger Docs Image
 - ![image](https://github.com/user-attachments/assets/960beabc-0079-4855-bb91-0eb76e0ca18b)
 - ![image](https://github.com/user-attachments/assets/5e979f1e-3509-4b79-9d99-d14c08281681)
-
-
-
-## License
-
-The SecureTrust Bank backend API is open-source and released under the [MIT License](LICENSE). Feel free to modify and use the code as per the terms of the license.
