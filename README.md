@@ -18,8 +18,6 @@ This repository contains the backend API implementation for the Automated Doors 
 
 Automated Door API provides a comprehensive backend API for managing user accounts, authentication, door creation, door assignment to access control group, door access control group creation etc.
 
-This project was built using the principles
-
 There are 5 core entities for this project
 * AuditTrail
 * Door
