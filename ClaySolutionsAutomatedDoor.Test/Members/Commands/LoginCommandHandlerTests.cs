@@ -18,12 +18,14 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
         private readonly Mock<RoleManager<IdentityRole>> _mockRoleManager;
         private readonly Mock<ILogger<LoginCommandHandler>> _mockLogger = new();
         private readonly Mock<IOptions<BearerTokenConfiguration>> _mockBearerTokenConfig = new();
+        private readonly Mock<SignInManager<ApplicationUser>> _mockSignInManager;
 
 
         public LoginCommandHandlerTests()
         {
             _mockUserManager = MockHelpers.MockUserManager(TestData.TestUsers);
             _mockRoleManager = MockHelpers.MockRoleManager<IdentityRole>(TestData.TestRoles);
+            _mockSignInManager = MockHelpers.MockSignInManager(_mockUserManager);
         }
 
         [Fact]
@@ -32,7 +34,7 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
             //arrange
             var command = new LoginCommand
             {
-                EmailAddress = "ada.lovelace@hotmail.com",
+                EmailAddress = "ada.lovelace@outlook.com",
                 Password = "StrongPassword1$",
             };
 
