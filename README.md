@@ -70,7 +70,7 @@ The technology stack used in this project is as follows:
   2) MySql
   3) .NET Core 8 and Above
 
-  Clone the app via this url<https://github.com/sholanejo/ClaySolutionsAutomatedDoor.git> into your local machine, open the cloned app and run the app using visual studio to see the swagger documentation.
+  Clone the app via this url <https://github.com/sholanejo/ClaySolutionsAutomatedDoor.git> into your local machine, open the cloned app and run the app using visual studio to see the swagger documentation.
   At Application startup, a local database is created named claysolutionsautomateddoor if the database does not currently exist.
 
 ## Docs
