@@ -85,7 +85,11 @@ The technology stack used in this project is as follows:
 
 ## Docs
 
-- Post Man Collection: <http://localhost/>
+- Swagger Docs Image
+- ![image](https://github.com/user-attachments/assets/960beabc-0079-4855-bb91-0eb76e0ca18b)
+- ![image](https://github.com/user-attachments/assets/5e979f1e-3509-4b79-9d99-d14c08281681)
+
+
 
 ## License
 
