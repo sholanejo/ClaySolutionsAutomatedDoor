@@ -7,6 +7,7 @@ This repository contains the backend API implementation for the Automated Doors 
 
   - [Table of Contents](#table-of-contents)
   - [Overview](#overview)
+  - [Architecture](#architecture)
   - [Features](#features)
   - [Technology Stack](#technology-stack)
   - [Run The App](#run-the-app)
@@ -17,12 +18,19 @@ This repository contains the backend API implementation for the Automated Doors 
 
 Automated Door API provides a comprehensive backend API for managing user accounts, authentication, door creation, door assignment to access control group, door access control group creation etc.
 
+This project was built using the principles
+
 There are 5 core entities for this project
 * AuditTrail
 * Door
 * DoorAccessControlGroup
 * DoorPermission
-* AuditTrail
+* Application
+
+## Architecture 
+
+This project is built with CQRS Clean Architectural pattern. A pattern that separates read and update operations for a data store. Implementing CQRS in this application maximizes its performance, scalability, and security. This makes the code easier to manage and with better performance. It improves separates read and write operations, making the system more maintainable and scalable. Promotes a clean architecture by decoupling business logic from controllers. 
+
 
 ## Features
 
