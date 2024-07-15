@@ -5,6 +5,7 @@ using ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands;
 using ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Query;
 using ClaySolutionsAutomatedDoor.Application.Features.DoorAccessControlFeatures.Commands;
 using ClaySolutionsAutomatedDoor.Domain.Dtos;
+using ClaySolutionsAutomatedDoor.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -64,8 +65,8 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// <response code="401">If jwt token provided is invalid.</response>
         /// <response code="403">If caller does not have the permission to create user.</response>
         [HttpPost]
-        [Route("door-access-control-group")]
-        [Authorize]
+        [Route("add-access-control-group")]
+        [Authorize(Roles = nameof(Roles.AdminUser))]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
@@ -92,8 +93,8 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// <response code="401">If jwt token provided is invalid.</response>
         /// <response code="403">If caller does not have the permission to create user.</response>
         [HttpPost]
-        [Route("door-to-access-control-group")]
-        [Authorize]
+        [Route("assign-door-to-access-control-group")]
+        [Authorize(Roles = nameof(Roles.AdminUser))]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
@@ -121,7 +122,7 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// <response code="403">If caller does not have the permission to create user.</response>
         [HttpPatch]
         [Route("deactivate-user")]
-        [Authorize]
+        [Authorize(Policy = "CanChangeUserActiveState")]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
@@ -140,7 +141,7 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// <response code="403">If caller does not have the permission to create user.</response>
         [HttpPatch]
         [Route("activate-user")]
-        [Authorize]
+        [Authorize(Policy = "CanChangeUserActiveState")]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
@@ -159,7 +160,7 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// <response code="403">If caller does not have the permission to create user.</response>
         [HttpDelete]
         [Route("remove-door-from-access-control-group")]
-        [Authorize]
+        [Authorize(Roles = nameof(Roles.AdminUser))]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
@@ -182,7 +183,7 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// <response code="403">If caller does not have the permission to create user.</response>
         [HttpGet]
         [Route("audit-trail")]
-        [Authorize]
+        [Authorize(Policy = "CanReadAuditTrail")]
         [ProducesResponseType(typeof(BaseResponse<PaginatedParameter<AuditTrailDto>>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse<PaginatedParameter<AuditTrailDto>>), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse<PaginatedParameter<AuditTrailDto>>), (int)HttpStatusCode.Forbidden)]
@@ -203,7 +204,7 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// <response code="403">If caller does not have the permission to create user.</response>
         [HttpGet]
         [Route("door-access-control-group")]
-        [Authorize]
+        [Authorize(Roles = nameof(Roles.AdminUser))]
         [ProducesResponseType(typeof(BaseResponse<PaginatedParameter<DoorAccessControlGroupDto>>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse<PaginatedParameter<DoorAccessControlGroupDto>>), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse<PaginatedParameter<DoorAccessControlGroupDto>>), (int)HttpStatusCode.Forbidden)]
@@ -222,7 +223,7 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// <response code="403">If caller does not have the permission to create user.</response>
         [HttpPatch]
         [Route("user-door-access-control-group")]
-        [Authorize]
+        [Authorize(Roles = nameof(Roles.AdminUser))]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]

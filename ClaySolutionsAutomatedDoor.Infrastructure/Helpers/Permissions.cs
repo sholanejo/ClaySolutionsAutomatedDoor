@@ -12,5 +12,11 @@
                 $"Permissions.{module}.Delete",
             };
         }
+
+        public static class ApplicationUser
+        {
+            public const string Delete = "Permissions.User.Delete";
+            public const string Create = "Permissions.User.Create";
+        }
     }
 }

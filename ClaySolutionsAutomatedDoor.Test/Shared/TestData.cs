@@ -1,4 +1,6 @@
 ﻿using ClaySolutionsAutomatedDoor.Domain.Entities;
+using ClaySolutionsAutomatedDoor.Domain.Enums;
+using Microsoft.AspNetCore.Identity;
 
 namespace ClaySolutionsAutomatedDoor.Test.Shared
 {
@@ -53,7 +55,7 @@ namespace ClaySolutionsAutomatedDoor.Test.Shared
             CreatedDate = DateTime.Now
         };
 
-        static ApplicationUser InActiveUser = new()
+        public static ApplicationUser InActiveUser = new()
         {
             FirstName = "Ada",
             LastName = "Lovelace",
@@ -93,6 +95,12 @@ namespace ClaySolutionsAutomatedDoor.Test.Shared
             Employee,
             OfficeManager,
             Director
+        };
+
+        public static List<IdentityRole> TestRoles = new()
+        {
+            new IdentityRole(Roles.AdminUser.ToString()),
+            new IdentityRole(Roles.RegularUser.ToString()),
         };
     }
 }

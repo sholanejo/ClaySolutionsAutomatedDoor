@@ -35,7 +35,7 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// <response code="403">If caller does not have the permission to create user.</response>
         /// <response code="409">If the door already exists.</response>
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "CanAddDoor")]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
