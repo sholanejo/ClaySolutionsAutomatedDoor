@@ -1,6 +1,8 @@
 ﻿using ClaySolutionsAutomatedDoor.Application.Common.Repositories;
 using ClaySolutionsAutomatedDoor.Domain.Configurations;
 using ClaySolutionsAutomatedDoor.Domain.Entities;
+using ClaySolutionsAutomatedDoor.Domain.Enums;
+using ClaySolutionsAutomatedDoor.Infrastructure.Helpers;
 using ClaySolutionsAutomatedDoor.Infrastructure.Persistence;
 using ClaySolutionsAutomatedDoor.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -68,6 +70,35 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Extensions
                     NameClaimType = ClaimTypes.NameIdentifier,
                 };
             });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("UserCreation", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("Permission", Permissions.ApplicationUser.Create);
+                });
+
+                options.AddPolicy("CanChangeUserActiveState", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireRole(Roles.AdminUser.ToString());
+                });
+
+                options.AddPolicy("CanReadAuditTrail", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireRole(Roles.AdminUser.ToString());
+                });
+
+                options.AddPolicy("CanAddDoor", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireRole(Roles.AdminUser.ToString());
+                });
+
+            });
+
             return services;
         }
     }

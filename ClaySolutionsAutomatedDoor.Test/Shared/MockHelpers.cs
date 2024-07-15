@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -20,14 +22,42 @@ namespace ClaySolutionsAutomatedDoor.Test.Shared
             return mgr;
         }
 
-        public static Mock<RoleManager<TRole>> MockRoleManager<TRole>(IRoleStore<TRole> store = null) where TRole : class
+        public static Mock<RoleManager<TRole>> MockRoleManager<TRole>(List<TRole> roles) where TRole : class
         {
-            store = store ?? new Mock<IRoleStore<TRole>>().Object;
-            var roles = new List<IRoleValidator<TRole>>();
-            roles.Add(new RoleValidator<TRole>());
-            return new Mock<RoleManager<TRole>>(store, roles, MockLookupNormalizer(),
+            var store = new Mock<IRoleStore<TRole>>();
+            var roleValidators = new List<IRoleValidator<TRole>>
+            {
+                new RoleValidator<TRole>()
+            };
+            var mgr = new Mock<RoleManager<TRole>>(store.Object, roleValidators, MockLookupNormalizer(),
                 new IdentityErrorDescriber(), null);
+
+            mgr.Setup(x => x.CreateAsync(It.IsAny<TRole>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            return mgr;
         }
+
+
+        public static Mock<SignInManager<TUser>> MockSignInManager<TUser>(Mock<UserManager<TUser>> userManager) where TUser : class
+        {
+            var contextAccessor = new Mock<IHttpContextAccessor>();
+            var claimsFactory = new Mock<IUserClaimsPrincipalFactory<TUser>>();
+            var options = new Mock<IOptions<IdentityOptions>>();
+            var logger = new Mock<ILogger<SignInManager<TUser>>>();
+            var schemes = new Mock<IAuthenticationSchemeProvider>();
+            var confirmation = new Mock<IUserConfirmation<TUser>>();
+
+            return new Mock<SignInManager<TUser>>(
+                userManager.Object,
+                contextAccessor.Object,
+                claimsFactory.Object,
+                options.Object,
+                logger.Object,
+                schemes.Object,
+                confirmation.Object);
+        }
+
 
         public static UserManager<TUser> TestUserManager<TUser>(IUserStore<TUser> store = null) where TUser : class
         {

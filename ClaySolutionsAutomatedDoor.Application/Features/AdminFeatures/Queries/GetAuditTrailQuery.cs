@@ -7,12 +7,14 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
 
 namespace ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Query
 {
     public class GetAuditTrailQuery : IRequest<BaseResponse<PaginatedParameter<AuditTrailDto>>>
     {
-        public required string UserId { get; set; }
+        [Required]
+        public string UserId { get; set; }
         public int? PageSize { get; set; }
         public int? Page { get; set; }
     }

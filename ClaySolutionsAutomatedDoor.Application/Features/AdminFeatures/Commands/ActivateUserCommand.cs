@@ -14,7 +14,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands
     }
 
     public class ActivateUserCommandHandler(UserManager<ApplicationUser> _userManager,
-        ILogger<DeActivateUserCommandHandler> _logger,
+        ILogger<ActivateUserCommandHandler> _logger,
         IUnitOfWorkRepository _unitOfWorkRepository) : IRequestHandler<ActivateUserCommand, BaseResponse>
     {
         public async Task<BaseResponse> Handle(ActivateUserCommand request, CancellationToken cancellationToken)
