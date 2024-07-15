@@ -36,7 +36,7 @@ The project consists of 4 Layers
 - The Application Layer contains the business logic and orchestrates the interaction between the API layer and the Domain layer.
 - ### Domain Layer ->
 - The Domain Layer encapsulates the core business logic and rules.
-- ### Infrasturcture Layer ->
+- ### Infrastructure Layer ->
 - The Infrastructure Layer provides implementations for interactions with external systems and technologies, such as databases, etc.
 
 
