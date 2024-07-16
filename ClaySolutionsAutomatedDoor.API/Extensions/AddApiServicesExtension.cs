@@ -20,7 +20,6 @@ namespace ClaySolutionsAutomatedDoor.API.Extensions
                     {
                         if (string.IsNullOrWhiteSpace(origin)) return false;
                         if (origin.ToLower().StartsWith("http://localhost") && builder.Environment.IsDevelopment()) return true;
-                        if (origin.ToLower().Contains("zedvance.com")) return true;
                         return false;
                     }); // allow any origin
                 });
