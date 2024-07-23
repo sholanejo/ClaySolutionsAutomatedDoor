@@ -65,13 +65,15 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// <response code="401">If jwt token provided is invalid.</response>
         /// <response code="403">If caller does not have the permission to open door.</response>
         [HttpPost]
-        [Route("open-door")]
+        [Route("open/{DoorId}")]
         [Authorize]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
-        public async Task<ActionResult> OpenDoor([FromBody] OpenDoorCommand command)
+        public async Task<ActionResult> OpenDoor([FromRoute] Guid DoorId)
         {
+            var userId = User.Identity.GetUserId();
+            var command = new OpenDoorCommand { DoorId = DoorId, UserId = userId };
             var result = await _sender.Send(command);
             return StatusCode(result.StatusCode, result);
         }
