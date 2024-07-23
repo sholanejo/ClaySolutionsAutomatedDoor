@@ -49,7 +49,7 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
                 .ReturnsAsync(TestData.OfficeManager);
 
             _mockUnitOfWorkRepository
-               .Setup(x => x.DoorRepository.GetByIdAsync(It.IsAny<string>()))
+               .Setup(x => x.DoorRepository.GetByIdAsync(It.IsAny<string>(), default))
                .ReturnsAsync(door);
 
             var handler = new OpenDoorCommandHandler(_mockUnitOfWorkRepository.Object, _mockLogger.Object, _mockUserManager.Object);
@@ -95,11 +95,11 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
                 .ReturnsAsync(TestData.OfficeManager);
 
             _mockUnitOfWorkRepository
-               .Setup(x => x.DoorRepository.GetByIdAsync(It.IsAny<Guid>()))
+               .Setup(x => x.DoorRepository.GetByIdAsync(It.IsAny<Guid>(), default))
                .ReturnsAsync(door);
 
             _mockUnitOfWorkRepository
-               .Setup(x => x.DoorPermissionRepository.GetSingleAsync(It.IsAny<Expression<Func<DoorPermission, bool>>>()))
+               .Setup(x => x.DoorPermissionRepository.GetSingleAsync(It.IsAny<Expression<Func<DoorPermission, bool>>>(), default))
                .ReturnsAsync((Expression<Func<DoorPermission, bool>> predicate) =>
                {
                    var compiledPredicate = predicate.Compile();
@@ -107,7 +107,7 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
                });
 
             _mockUnitOfWorkRepository
-                .Setup(x => x.AuditTrailRepository.InsertAsync(It.IsAny<AuditTrail>())).Returns(Task.CompletedTask);
+                .Setup(x => x.AuditTrailRepository.InsertAsync(It.IsAny<AuditTrail>(), default)).Returns(Task.CompletedTask);
 
             var handler = new OpenDoorCommandHandler(_mockUnitOfWorkRepository.Object, _mockLogger.Object, _mockUserManager.Object);
 
@@ -152,11 +152,11 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
                 .ReturnsAsync(TestData.OfficeManager);
 
             _mockUnitOfWorkRepository
-               .Setup(x => x.DoorRepository.GetByIdAsync(It.IsAny<Guid>()))
+               .Setup(x => x.DoorRepository.GetByIdAsync(It.IsAny<Guid>(), default))
                .ReturnsAsync(door);
 
             _mockUnitOfWorkRepository
-               .Setup(x => x.DoorPermissionRepository.GetSingleAsync(It.IsAny<Expression<Func<DoorPermission, bool>>>()))
+               .Setup(x => x.DoorPermissionRepository.GetSingleAsync(It.IsAny<Expression<Func<DoorPermission, bool>>>(), default))
                .ReturnsAsync((Expression<Func<DoorPermission, bool>> predicate) =>
                {
                    var compiledPredicate = predicate.Compile();
@@ -164,7 +164,7 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
                });
 
             _mockUnitOfWorkRepository
-                .Setup(x => x.AuditTrailRepository.InsertAsync(It.IsAny<AuditTrail>())).Returns(Task.CompletedTask);
+                .Setup(x => x.AuditTrailRepository.InsertAsync(It.IsAny<AuditTrail>(), default)).Returns(Task.CompletedTask);
 
             var handler = new OpenDoorCommandHandler(_mockUnitOfWorkRepository.Object, _mockLogger.Object, _mockUserManager.Object);
 

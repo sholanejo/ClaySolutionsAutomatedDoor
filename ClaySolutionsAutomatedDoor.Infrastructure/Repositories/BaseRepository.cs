@@ -12,54 +12,55 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Repositories
 
         public BaseRepository(AutomatedDoorDbContext dbContext)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(_dbContext));
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _dbSet = _dbContext.Set<TEntity>();
         }
 
-
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _dbSet.ToListAsync();
+            return await _dbSet.ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<TEntity>> GetAsync(Func<TEntity, bool> predicate)
+        public async Task<IEnumerable<TEntity>> GetAsync(Func<TEntity, bool> predicate, CancellationToken cancellationToken = default)
         {
-            return _dbSet.Where(predicate).AsEnumerable();
+            return await Task.Run(() => _dbSet.Where(predicate).AsEnumerable(), cancellationToken);
         }
 
-        public async Task<TEntity> GetByIdAsync(object id)
+        public async Task<TEntity> GetByIdAsync(object id, CancellationToken cancellationToken = default)
         {
-            return await _dbSet.FindAsync(id);
+            return await _dbSet.FindAsync(new object[] { id }, cancellationToken);
         }
 
-        public async Task InsertAsync(TEntity entity)
+        public async Task InsertAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            await _dbSet.AddAsync(entity);
+            await _dbSet.AddAsync(entity, cancellationToken);
         }
 
-        public async Task UpdateAsync(TEntity entity)
+        public async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             _dbSet.Attach(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
             await Task.CompletedTask;
         }
 
-        public async Task DeleteAsync(object id)
+        public async Task DeleteAsync(object id, CancellationToken cancellationToken = default)
         {
-            TEntity entityToDelete = await _dbSet.FindAsync(id);
+            TEntity entityToDelete = await _dbSet.FindAsync(new object[] { id }, cancellationToken);
             if (entityToDelete != null)
             {
                 _dbSet.Remove(entityToDelete);
+                await Task.CompletedTask;
             }
         }
-        public async Task InsertRangeAsync(IEnumerable<TEntity> entities)
+
+        public async Task InsertRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
-            await _dbSet.AddRangeAsync(entities);
+            await _dbSet.AddRangeAsync(entities, cancellationToken);
         }
 
-        public Task<IQueryable<TEntity>> GetQueryAsync(Func<TEntity, bool> predicate)
+        public async Task<IQueryable<TEntity>> GetQueryAsync(Func<TEntity, bool> predicate, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(_dbSet.Where(predicate).AsQueryable());
+            return await Task.Run(() => _dbSet.Where(predicate).AsQueryable(), cancellationToken);
         }
 
         public IQueryable<TEntity> GetAllQuery()
@@ -67,29 +68,30 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Repositories
             return _dbSet.AsQueryable();
         }
 
-        public async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> predicate)
+        public async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            return await _dbSet.FirstOrDefaultAsync(predicate);
+            return await _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);
         }
 
-        public async Task UpdateRangeAsync(IEnumerable<TEntity> entities)
+        public async Task UpdateRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
             foreach (var entity in entities)
             {
                 _dbSet.Attach(entity);
                 _dbContext.Entry(entity).State = EntityState.Modified;
             }
-
             await Task.CompletedTask;
         }
-        public async Task RemoveRangeAsync(IEnumerable<TEntity> entities)
+
+        public async Task RemoveRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
         {
             _dbSet.RemoveRange(entities);
             await Task.CompletedTask;
         }
-        public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate)
+
+        public async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            return await _dbSet.AnyAsync(predicate);
+            return await _dbSet.AnyAsync(predicate, cancellationToken);
         }
     }
 }

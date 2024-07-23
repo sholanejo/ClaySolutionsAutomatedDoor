@@ -73,7 +73,7 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
 
             _mockUnitOfWorkRepository
                 .Setup(x => x.DoorAccessControlGroupRepository
-                .GetByIdAsync(It.IsAny<Guid>()))
+                .GetByIdAsync(It.IsAny<Guid>(), default))
                 .ReturnsAsync(controlGroup);
             var handler = new AddApplicationUserCommandHandler(_mockUserManager.Object, _mockUnitOfWorkRepository.Object, _mockLogger.Object);
 
@@ -102,7 +102,7 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
 
             _mockUnitOfWorkRepository
                 .Setup(x => x.DoorAccessControlGroupRepository
-                .GetByIdAsync(It.IsAny<Guid>()))
+                .GetByIdAsync(It.IsAny<Guid>(), default))
                 .ReturnsAsync(TestData.RestrictedDoorAccessControlGroup);
 
             var handler = new AddApplicationUserCommandHandler(_mockUserManager.Object, _mockUnitOfWorkRepository.Object, _mockLogger.Object);
