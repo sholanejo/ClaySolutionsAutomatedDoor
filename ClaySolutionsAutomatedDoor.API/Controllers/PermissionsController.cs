@@ -59,5 +59,24 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
             var result = await _sender.Send(command);
             return StatusCode(result.StatusCode, result);
         }
+
+        /// <summary>
+        /// Add a user to a role 
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="201">When the user is successfully added to a role</response>
+        /// <response code="401">If jwt token provided is invalid.</response>
+        /// <response code="403">If caller does not have the permission to add user to role.</response>
+        [HttpPost]
+        [Authorize(Roles = nameof(Roles.AdminUser))]
+        [Route("add-user-to-role")]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
+        public async Task<ActionResult> AddUserToRole([FromBody] AddUserToRoleCommand command)
+        {
+            var result = await _sender.Send(command);
+            return StatusCode(result.StatusCode, result);
+        }
     }
 }

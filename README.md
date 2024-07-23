@@ -23,7 +23,7 @@ There are 5 core entities for this project
 * Door
 * DoorAccessControlGroup
 * DoorPermission
-* Application
+* ApplicationUser
 
 ## Architecture 
 
