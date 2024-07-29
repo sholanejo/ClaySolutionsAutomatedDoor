@@ -16,7 +16,6 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
     [Produces("application/json")]
     public class DoorController : ControllerBase
     {
-
         private readonly ISender _sender;
 
         public DoorController(ISender sender)
@@ -24,15 +23,14 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
             _sender = sender;
         }
 
-
         /// <summary>
         /// Creates a new door 
         /// This will additionally log the activity.
         /// </summary>
         /// <returns></returns>
         /// <response code="201">When the door is successfully created</response>
-        /// <response code="401">If jwt token provided is invalid.</response>
-        /// <response code="403">If caller does not have the permission to create user.</response>
+        /// <response code="401">If JWT token provided is invalid.</response>
+        /// <response code="403">If caller does not have the permission to create door.</response>
         /// <response code="409">If the door already exists.</response>
         [HttpPost]
         [Authorize(Policy = "CanAddDoor")]
@@ -55,25 +53,23 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
             return StatusCode(result.StatusCode, result);
         }
 
-
         /// <summary>
         /// Opens a door 
         /// This will additionally log the activity.
         /// </summary>
         /// <returns></returns>
         /// <response code="200">When the door is successfully opened</response>
-        /// <response code="401">If jwt token provided is invalid.</response>
+        /// <response code="401">If JWT token provided is invalid.</response>
         /// <response code="403">If caller does not have the permission to open door.</response>
-        [HttpPost]
-        [Route("open/{DoorId}")]
+        [HttpPost("open/{doorId}")]
         [Authorize]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
-        public async Task<ActionResult> OpenDoor([FromRoute] Guid DoorId)
+        public async Task<ActionResult> OpenDoor([FromRoute] Guid doorId)
         {
             var userId = User.Identity.GetUserId();
-            var command = new OpenDoorCommand { DoorId = DoorId, UserId = userId };
+            var command = new OpenDoorCommand { DoorId = doorId, UserId = userId };
             var result = await _sender.Send(command);
             return StatusCode(result.StatusCode, result);
         }
@@ -83,16 +79,16 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// </summary>
         /// <returns></returns>
         /// <response code="200">When the door is returned</response>
-        /// <response code="401">If jwt token provided is invalid.</response>
+        /// <response code="401">If JWT token provided is invalid.</response>
         /// <response code="403">If caller does not have the permission to get door.</response>
-        [HttpGet]
+        [HttpGet("{doorId}")]
         [Authorize]
-        [Route("{DoorId}")]
         [ProducesResponseType(typeof(BaseResponse<DoorDto>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse<DoorDto>), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse<DoorDto>), (int)HttpStatusCode.Forbidden)]
-        public async Task<ActionResult> GetDoor([FromRoute] GetSingleDoorQuery query)
+        public async Task<ActionResult> GetDoor([FromRoute] Guid doorId)
         {
+            var query = new GetSingleDoorQuery { DoorId = doorId };
             var result = await _sender.Send(query);
             return StatusCode(result.StatusCode, result);
         }
@@ -102,10 +98,9 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// </summary>
         /// <returns></returns>
         /// <response code="200">When the doors are returned</response>
-        /// <response code="401">If jwt token provided is invalid.</response>
-        /// <response code="403">If caller does not have the permission to get door.</response>
+        /// <response code="401">If JWT token provided is invalid.</response>
+        /// <response code="403">If caller does not have the permission to get doors.</response>
         [HttpGet]
-        [Route("doors")]
         [Authorize]
         [ProducesResponseType(typeof(BaseResponse<PaginatedParameter<DoorDto>>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse<PaginatedParameter<DoorDto>>), (int)HttpStatusCode.Unauthorized)]

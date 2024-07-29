@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ClaySolutionsAutomatedDoor.Application.Features.PermissionFeatures.Commands
 {
@@ -11,6 +12,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.PermissionFeatures.Com
     {
         [Required(ErrorMessage = "User Id Is required")]
         public string UserId { get; set; }
+        [JsonIgnore]
         [Required(ErrorMessage = "Role Id Is required")]
         public string RoleId { get; set; }
     }

@@ -26,14 +26,12 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
 
         /// <summary>
         /// Creates a new user
-        /// This will additionally log the activity.
         /// </summary>
         /// <returns></returns>
         /// <response code="201">When the user is successfully created</response>
-        /// <response code="401">If jwt token provided is invalid.</response>
-        /// <response code="403">If caller does not have the permission to create user.</response>
-        [HttpPost]
-        [Route("create-user")]
+        /// <response code="401">If JWT token provided is invalid.</response>
+        /// <response code="403">If caller does not have permission to create user.</response>
+        [HttpPost("users")]
         [Authorize(Policy = "UserCreation")]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
@@ -58,14 +56,12 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
 
         /// <summary>
         /// Creates a door access control group
-        /// This will additionally log the activity.
         /// </summary>
         /// <returns></returns>
-        /// <response code="201">When the user is successfully created</response>
-        /// <response code="401">If jwt token provided is invalid.</response>
-        /// <response code="403">If caller does not have the permission to create user.</response>
-        [HttpPost]
-        [Route("add-access-control-group")]
+        /// <response code="201">When the access control group is successfully created</response>
+        /// <response code="401">If JWT token provided is invalid.</response>
+        /// <response code="403">If caller does not have permission to create access control group.</response>
+        [HttpPost("access-control-groups")]
         [Authorize(Roles = nameof(Roles.AdminUser))]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
@@ -86,25 +82,23 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
 
         /// <summary>
         /// Assigns a door to an access control group
-        /// This will additionally log the activity.
         /// </summary>
         /// <returns></returns>
-        /// <response code="201">When the user is successfully created</response>
-        /// <response code="401">If jwt token provided is invalid.</response>
-        /// <response code="403">If caller does not have the permission to create user.</response>
-        [HttpPost]
-        [Route("assign-door-to-access-control-group")]
+        /// <response code="201">When the door is successfully assigned</response>
+        /// <response code="401">If JWT token provided is invalid.</response>
+        /// <response code="403">If caller does not have permission to assign door.</response>
+        [HttpPost("access-control-groups/{groupId}/doors")]
         [Authorize(Roles = nameof(Roles.AdminUser))]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
-        public async Task<ActionResult> AddDoorPermission([FromBody] AddDoorPermissionDto request)
+        public async Task<ActionResult> AddDoorPermission([FromRoute] Guid groupId, [FromBody] AddDoorPermissionDto request)
         {
             var createdBy = User.Identity.GetUserId();
 
             var command = new AddDoorToDoorAccessControlGroupCommand
             {
-                DoorAccessControlGroupId = request.DoorAccessControlGroupId,
+                DoorAccessControlGroupId = groupId,
                 CreatedBy = createdBy,
                 DoorId = request.DoorId,
             };
@@ -118,16 +112,16 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// </summary>
         /// <returns></returns>
         /// <response code="200">When the user is successfully deactivated</response>
-        /// <response code="401">If jwt token provided is invalid.</response>
-        /// <response code="403">If caller does not have the permission to create user.</response>
-        [HttpPatch]
-        [Route("deactivate-user")]
+        /// <response code="401">If JWT token provided is invalid.</response>
+        /// <response code="403">If caller does not have permission to deactivate user.</response>
+        [HttpPatch("users/{userId}/deactivate")]
         [Authorize(Policy = "CanChangeUserActiveState")]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
-        public async Task<ActionResult> DeActivateUser([FromBody] DeActivateUserCommand command)
+        public async Task<ActionResult> DeActivateUser([FromRoute] Guid userId)
         {
+            var command = new DeActivateUserCommand { UserId = userId };
             var result = await _sender.Send(command);
             return StatusCode(result.StatusCode, result);
         }
@@ -136,39 +130,43 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// Activate User
         /// </summary>
         /// <returns></returns>
-        /// <response code="200">When the user is successfully Activated</response>
-        /// <response code="401">If jwt token provided is invalid.</response>
-        /// <response code="403">If caller does not have the permission to create user.</response>
-        [HttpPatch]
-        [Route("activate-user")]
+        /// <response code="200">When the user is successfully activated</response>
+        /// <response code="401">If JWT token provided is invalid.</response>
+        /// <response code="403">If caller does not have permission to activate user.</response>
+        [HttpPatch("users/{userId}/activate")]
         [Authorize(Policy = "CanChangeUserActiveState")]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
-        public async Task<ActionResult> ActivateUser([FromBody] ActivateUserCommand command)
+        public async Task<ActionResult> ActivateUser([FromRoute] Guid userId)
         {
+            var command = new ActivateUserCommand { UserId = userId };
             var result = await _sender.Send(command);
             return StatusCode(result.StatusCode, result);
         }
 
         /// <summary>
-        /// Removes door from access control groupr
+        /// Removes door from access control group
         /// </summary>
         /// <returns></returns>
-        /// <response code="200">When the user is successfully Activated</response>
-        /// <response code="401">If jwt token provided is invalid.</response>
-        /// <response code="403">If caller does not have the permission to create user.</response>
-        [HttpDelete]
-        [Route("remove-door-from-access-control-group")]
+        /// <response code="200">When the door is successfully removed</response>
+        /// <response code="401">If JWT token provided is invalid.</response>
+        /// <response code="403">If caller does not have permission to remove door.</response>
+        [HttpDelete("access-control-groups/{groupId}/doors/{doorId}")]
         [Authorize(Roles = nameof(Roles.AdminUser))]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
-        public async Task<ActionResult> RemoveDoorFromDoorAccessGroup([FromBody] RemoveDoorFromDoorPermissionDto request)
+        public async Task<ActionResult> RemoveDoorFromDoorAccessGroup([FromRoute] Guid groupId, [FromRoute] Guid doorId)
         {
             var createdBy = User.Identity.GetUserId();
 
-            var command = new RemoveDoorFromDoorPermissionCommand { DoorAccessControlGroupId = request.DoorAccessControlGroupId, CreatedBy = createdBy, DoorId = request.DoorId };
+            var command = new RemoveDoorFromDoorPermissionCommand
+            {
+                DoorAccessControlGroupId = groupId,
+                CreatedBy = createdBy,
+                DoorId = doorId
+            };
 
             var result = await _sender.Send(command);
             return StatusCode(result.StatusCode, result);
@@ -179,17 +177,21 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// </summary>
         /// <returns></returns>
         /// <response code="200">When the request is successful</response>
-        /// <response code="401">If jwt token provided is invalid.</response>
-        /// <response code="403">If caller does not have the permission to create user.</response>
-        [HttpGet]
-        [Route("audit-trail")]
+        /// <response code="401">If JWT token provided is invalid.</response>
+        /// <response code="403">If caller does not have permission to view audit trail.</response>
+        [HttpGet("audit-trail")]
         [Authorize(Policy = "CanReadAuditTrail")]
         [ProducesResponseType(typeof(BaseResponse<PaginatedParameter<AuditTrailDto>>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse<PaginatedParameter<AuditTrailDto>>), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse<PaginatedParameter<AuditTrailDto>>), (int)HttpStatusCode.Forbidden)]
         public async Task<ActionResult> GetAuditTrail([FromQuery] GetAuditTrailQuery request)
         {
-            var query = new GetAuditTrailQuery { UserId = request.UserId, Page = request.Page, PageSize = request.PageSize };
+            var query = new GetAuditTrailQuery
+            {
+                UserId = request.UserId,
+                Page = request.Page,
+                PageSize = request.PageSize
+            };
 
             var result = await _sender.Send(query);
             return StatusCode(result.StatusCode, result);
@@ -200,10 +202,9 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// </summary>
         /// <returns></returns>
         /// <response code="200">When the request is successful</response>
-        /// <response code="401">If jwt token provided is invalid.</response>
-        /// <response code="403">If caller does not have the permission to create user.</response>
-        [HttpGet]
-        [Route("door-access-control-group")]
+        /// <response code="401">If JWT token provided is invalid.</response>
+        /// <response code="403">If caller does not have permission to view access control group.</response>
+        [HttpGet("access-control-groups")]
         [Authorize(Roles = nameof(Roles.AdminUser))]
         [ProducesResponseType(typeof(BaseResponse<PaginatedParameter<DoorAccessControlGroupDto>>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse<PaginatedParameter<DoorAccessControlGroupDto>>), (int)HttpStatusCode.Unauthorized)]
@@ -219,16 +220,16 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// </summary>
         /// <returns></returns>
         /// <response code="200">When the request is successful</response>
-        /// <response code="401">If jwt token provided is invalid.</response>
-        /// <response code="403">If caller does not have the permission to create user.</response>
-        [HttpPatch]
-        [Route("user-door-access-control-group")]
+        /// <response code="401">If JWT token provided is invalid.</response>
+        /// <response code="403">If caller does not have permission to update access control group.</response>
+        [HttpPatch("users/{userId}/access-control-groups")]
         [Authorize(Roles = nameof(Roles.AdminUser))]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
-        public async Task<ActionResult> UpdateDoorAccessControlGroup([FromBody] UpdateUserDoorAccessControlGroupCommand request)
+        public async Task<ActionResult> UpdateDoorAccessControlGroup([FromRoute] string userId, [FromBody] UpdateUserDoorAccessControlGroupCommand request)
         {
+            request.UserId = userId;
             var result = await _sender.Send(request);
             return StatusCode(result.StatusCode, result);
         }

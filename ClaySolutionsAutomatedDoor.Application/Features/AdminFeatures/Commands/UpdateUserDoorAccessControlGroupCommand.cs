@@ -4,12 +4,14 @@ using ClaySolutionsAutomatedDoor.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using System.Text.Json.Serialization;
 
 namespace ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands
 {
     public class UpdateUserDoorAccessControlGroupCommand : IRequest<BaseResponse>
     {
-        public required string UserId { get; set; }
+        [JsonIgnore]
+        public string UserId { get; set; }
         public required Guid NewAccessControlGroupId { get; set; }
     }
 
