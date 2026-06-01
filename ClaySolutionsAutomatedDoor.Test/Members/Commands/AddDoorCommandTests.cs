@@ -49,7 +49,7 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
 
             _mockUnitOfWorkRepository
                .Setup(x => x.DoorRepository.GetSingleAsync(It.IsAny<Expression<Func<Door, bool>>>(), default))
-               .ReturnsAsync((Expression<Func<Door, bool>> predicate) =>
+               .ReturnsAsync((Expression<Func<Door, bool>> predicate, CancellationToken _) =>
                {
                    var compiledPredicate = predicate.Compile();
                    return compiledPredicate(mockDoor) ? mockDoor : null;
@@ -88,7 +88,7 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
 
             _mockUnitOfWorkRepository
                .Setup(x => x.DoorRepository.GetSingleAsync(It.IsAny<Expression<Func<Door, bool>>>(), default))
-               .ReturnsAsync((Expression<Func<Door, bool>> predicate) =>
+               .ReturnsAsync((Expression<Func<Door, bool>> predicate, CancellationToken _) =>
                {
                    var compiledPredicate = predicate.Compile();
                    return compiledPredicate(mockDoor) ? mockDoor : null;

@@ -23,7 +23,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.DoorFeatures.Queries
             {
                 DateCreated = x.DateCreated,
                 Location = x.Location,
-                Name = x.Location,
+                Name = x.Name,
                 Id = x.Id,
 
             });

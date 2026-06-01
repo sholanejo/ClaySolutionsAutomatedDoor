@@ -12,7 +12,7 @@ namespace ClaySolutionsAutomatedDoor.Test.Shared
 
         #region Users
 
-        public static ApplicationUser OfficeManager = new()
+        public static ApplicationUser OfficeManager => new()
         {
             Id = "E586519F-A3D5-4283-BCE5-2292794B4C13",
             FirstName = "Shola",
@@ -27,7 +27,7 @@ namespace ClaySolutionsAutomatedDoor.Test.Shared
             CreatedDate = DateTime.Now
         };
 
-        static ApplicationUser Director = new()
+        static ApplicationUser Director => new()
         {
             FirstName = "Timothy",
             LastName = "Johnson",
@@ -41,7 +41,7 @@ namespace ClaySolutionsAutomatedDoor.Test.Shared
             CreatedDate = DateTime.Now
         };
 
-        static ApplicationUser Employee = new()
+        static ApplicationUser Employee => new()
         {
             FirstName = "Jane",
             LastName = "Doe",
@@ -55,7 +55,7 @@ namespace ClaySolutionsAutomatedDoor.Test.Shared
             CreatedDate = DateTime.Now
         };
 
-        public static ApplicationUser InActiveUser = new()
+        public static ApplicationUser InActiveUser => new()
         {
             FirstName = "Ada",
             LastName = "Lovelace",
@@ -89,7 +89,7 @@ namespace ClaySolutionsAutomatedDoor.Test.Shared
         };
         #endregion
 
-        public static List<ApplicationUser> TestUsers = new()
+        public static List<ApplicationUser> TestUsers => new()
         {
             InActiveUser,
             Employee,

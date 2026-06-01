@@ -1,4 +1,4 @@
-﻿using ClaySolutionsAutomatedDoor.Application.Common.Models;
+using ClaySolutionsAutomatedDoor.Application.Common.Models;
 using ClaySolutionsAutomatedDoor.Application.Common.Repositories;
 using ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands;
 using ClaySolutionsAutomatedDoor.Domain.Entities;
@@ -11,35 +11,35 @@ using Shouldly;
 
 namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
 {
-    public class ActivateUserCommandTests
+    public class DeActivateUserCommandTests
     {
         private readonly Mock<UserManager<ApplicationUser>> _mockUserManager;
         private readonly Mock<IUnitOfWorkRepository> _mockUnitOfWorkRepository;
-        private readonly Mock<ILogger<ActivateUserCommandHandler>> _mockLogger = new();
+        private readonly Mock<ILogger<DeActivateUserCommandHandler>> _mockLogger = new();
 
-        public ActivateUserCommandTests()
+        public DeActivateUserCommandTests()
         {
             _mockUserManager = MockHelpers.MockUserManager(TestData.TestUsers);
             _mockUnitOfWorkRepository = new Mock<IUnitOfWorkRepository>();
         }
 
         [Fact]
-        public async Task Handle_Should_ReturnPassedResponse_WhenUserIsInActive()
+        public async Task Handle_Should_ReturnPassedResponse_WhenUserIsActive()
         {
             //arrange
-            var command = new ActivateUserCommand { UserId = Guid.NewGuid() };
+            var command = new DeActivateUserCommand { UserId = Guid.NewGuid() };
 
             _mockUserManager
                 .Setup(x => x.FindByIdAsync(It.IsAny<string>()))
-                .ReturnsAsync(TestData.InActiveUser);
-            var handler = new ActivateUserCommandHandler(_mockUserManager.Object, _mockLogger.Object, _mockUnitOfWorkRepository.Object);
+                .ReturnsAsync(TestData.OfficeManager);
+            var handler = new DeActivateUserCommandHandler(_mockUserManager.Object, _mockLogger.Object, _mockUnitOfWorkRepository.Object);
 
             //act
             var result = await handler.Handle(command, default);
 
             //assert
             result.Status.ShouldBe(true);
-            result.Message.ShouldBe(Constants.ActivateUserMessage);
+            result.Message.ShouldBe(Constants.DeactivateUserMessage);
             result.StatusCode.ShouldBe((int)StatusCodes.Status200OK);
         }
 
@@ -47,12 +47,12 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
         public async Task Handle_Should_ReturnFailedResponse_WhenUserDoesNotExist()
         {
             //arrange
-            var command = new ActivateUserCommand { UserId = Guid.NewGuid() };
+            var command = new DeActivateUserCommand { UserId = Guid.NewGuid() };
 
             _mockUserManager
                 .Setup(x => x.FindByIdAsync(It.IsAny<string>()))
                 .ReturnsAsync((ApplicationUser)null);
-            var handler = new ActivateUserCommandHandler(_mockUserManager.Object, _mockLogger.Object, _mockUnitOfWorkRepository.Object);
+            var handler = new DeActivateUserCommandHandler(_mockUserManager.Object, _mockLogger.Object, _mockUnitOfWorkRepository.Object);
 
             //act
             var result = await handler.Handle(command, default);
@@ -64,22 +64,22 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
         }
 
         [Fact]
-        public async Task Handle_Should_ReturnFailedResponse_WhenUserIsAlreadyActive()
+        public async Task Handle_Should_ReturnFailedResponse_WhenUserIsAlreadyInactive()
         {
             //arrange
-            var command = new ActivateUserCommand { UserId = Guid.NewGuid() };
+            var command = new DeActivateUserCommand { UserId = Guid.NewGuid() };
 
             _mockUserManager
                 .Setup(x => x.FindByIdAsync(It.IsAny<string>()))
-                .ReturnsAsync(TestData.OfficeManager);
-            var handler = new ActivateUserCommandHandler(_mockUserManager.Object, _mockLogger.Object, _mockUnitOfWorkRepository.Object);
+                .ReturnsAsync(TestData.InActiveUser);
+            var handler = new DeActivateUserCommandHandler(_mockUserManager.Object, _mockLogger.Object, _mockUnitOfWorkRepository.Object);
 
             //act
             var result = await handler.Handle(command, default);
 
             //assert
             result.Status.ShouldBe(false);
-            result.Message.ShouldBe(Constants.ActivateUserFailedMessage);
+            result.Message.ShouldBe(Constants.DeactivateUserFailedMessage);
             result.StatusCode.ShouldBe((int)StatusCodes.Status400BadRequest);
         }
     }

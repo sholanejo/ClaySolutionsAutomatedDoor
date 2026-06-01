@@ -22,6 +22,32 @@ namespace ClaySolutionsAutomatedDoor.Test.Members.Commands
 
 
         [Fact]
+        public async Task Handle_Should_ReturnFailedResponse_WhenRoleDoesNotExist()
+        {
+            //arrange
+            var command = new AddPermissionToRoleCommand
+            {
+                ClaimType = "Permission",
+                ClaimValue = "TestPermission",
+                RoleId = Guid.NewGuid().ToString()
+            };
+
+            _mockRoleManager
+                .Setup(x => x.FindByIdAsync(It.IsAny<string>()))
+                .ReturnsAsync((IdentityRole)null);
+
+            var handler = new AddPermissionToRoleCommandHandler(_mockRoleManager.Object);
+
+            //act
+            var result = await handler.Handle(command, default);
+
+            //assert
+            result.Status.ShouldBe(false);
+            result.Message.ShouldBe(Constants.RoleNotFOundMessage);
+            result.StatusCode.ShouldBe((int)StatusCodes.Status400BadRequest);
+        }
+
+        [Fact]
         public async Task Handle_Should_ReturnPassedResponse_WhenPermissionIsSuccessfullyAddedToRole()
         {
             //arrange
