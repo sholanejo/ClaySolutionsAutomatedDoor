@@ -33,7 +33,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands
 
             applicationUser.IsActive = false;
             await _userManager.UpdateAsync(applicationUser);
-            await _unitOfWorkRepository.CommitAsync();
+            await _unitOfWorkRepository.CommitAsync(cancellationToken);
 
             return BaseResponse.PassedResponse(Constants.DeactivateUserMessage, StatusCodes.Status200OK);
         }

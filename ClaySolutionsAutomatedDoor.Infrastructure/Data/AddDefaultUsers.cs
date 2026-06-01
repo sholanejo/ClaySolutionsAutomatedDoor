@@ -12,6 +12,9 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Data
         private const string Password = "StrongPassword1$";
         private static readonly Guid GeneralDoorAccessControlGroupId = Guid.Parse("1E4993B3-8B6C-40FC-8C68-B31FD3E8C5A4");
         private static readonly Guid RestrictedDoorAccessControlGroupId = Guid.Parse("5CB3E7C8-FBDA-4D86-AB2D-1111A8D0E4C0");
+        private static readonly Guid MainEntranceDoorId = Guid.Parse("A1B2C3D4-E5F6-7890-ABCD-EF1234567890");
+        private static readonly Guid StorageRoomDoorId = Guid.Parse("B2C3D4E5-F6A7-8901-BCDE-F12345678901");
+        private const string SeedUserId = "E586519F-A3D5-4283-BCE5-2292794B4C13";
 
         #region Door Access Control Groups
 
@@ -58,7 +61,7 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Data
             EmailConfirmed = true,
             PhoneNumberConfirmed = true,
             IsActive = true,
-            DoorAccessControlGroupId = GeneralDoorAccessControlGroupId,
+            DoorAccessControlGroupId = RestrictedDoorAccessControlGroupId,
             CreatedBy = "E586519F-A3D5-4283-BCE5-2292794B4C13",
             CreatedDate = DateTime.Now
         };
@@ -98,6 +101,57 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Data
         {
             await context.DoorAccessControlGroup.AddAsync(RestrictedDoorAccessControlGroup);
             await context.DoorAccessControlGroup.AddAsync(GeneralDoorAccessControlGroup);
+            await context.SaveChangesAsync();
+        }
+
+        public static async Task AddDefaultDoorsAndPermissionsAsync(AutomatedDoorDbContext context)
+        {
+            var mainEntrance = new Door
+            {
+                Id = MainEntranceDoorId,
+                Name = "Main Entrance",
+                Location = "Ground Floor",
+                DateCreated = DateTime.Now,
+                CreatedBy = SeedUserId,
+            };
+
+            var storageRoom = new Door
+            {
+                Id = StorageRoomDoorId,
+                Name = "Storage Room",
+                Location = "First Floor",
+                DateCreated = DateTime.Now,
+                CreatedBy = SeedUserId,
+            };
+
+            await context.Door.AddRangeAsync(mainEntrance, storageRoom);
+
+            // General Group can access main entrance only
+            await context.DoorPermission.AddAsync(new DoorPermission
+            {
+                DoorId = MainEntranceDoorId,
+                DoorAccessControlGroupId = GeneralDoorAccessControlGroupId,
+                DateCreated = DateTime.Now,
+                CreatedBy = SeedUserId,
+            });
+
+            // Restricted Group (office manager + director) can access both doors
+            await context.DoorPermission.AddAsync(new DoorPermission
+            {
+                DoorId = MainEntranceDoorId,
+                DoorAccessControlGroupId = RestrictedDoorAccessControlGroupId,
+                DateCreated = DateTime.Now,
+                CreatedBy = SeedUserId,
+            });
+
+            await context.DoorPermission.AddAsync(new DoorPermission
+            {
+                DoorId = StorageRoomDoorId,
+                DoorAccessControlGroupId = RestrictedDoorAccessControlGroupId,
+                DateCreated = DateTime.Now,
+                CreatedBy = SeedUserId,
+            });
+
             await context.SaveChangesAsync();
         }
 

@@ -21,13 +21,13 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands
         {
             var doorPermission = await _unitOfWorkRepository
                 .DoorPermissionRepository
-                .GetSingleAsync(x => x.DoorId.Equals(request.DoorId) && x.DoorAccessControlGroupId.Equals(request.DoorAccessControlGroupId));
+                .GetSingleAsync(x => x.DoorId.Equals(request.DoorId) && x.DoorAccessControlGroupId.Equals(request.DoorAccessControlGroupId), cancellationToken);
             if (doorPermission == null)
             {
                 return BaseResponse.FailedResponse(Constants.NoMatchingMessage, StatusCodes.Status400BadRequest);
             }
 
-            await _unitOfWorkRepository.DoorPermissionRepository.DeleteAsync(doorPermission.Id);
+            await _unitOfWorkRepository.DoorPermissionRepository.DeleteAsync(doorPermission.Id, cancellationToken);
 
             var notes = string.Format(Constants.AccessGroupDeletedMessage,
                 doorPermission.DoorId, doorPermission.DoorAccessControlGroupId);
@@ -37,8 +37,9 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands
                 PerformedBy = request.CreatedBy,
                 Notes = notes
             };
+            await _unitOfWorkRepository.AuditTrailRepository.InsertAsync(auditTrail, cancellationToken);
 
-            await _unitOfWorkRepository.CommitAsync();
+            await _unitOfWorkRepository.CommitAsync(cancellationToken);
 
             return BaseResponse.PassedResponse(Constants.ApiOkMessage, StatusCodes.Status200OK);
         }

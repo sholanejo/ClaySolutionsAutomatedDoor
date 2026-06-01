@@ -61,7 +61,7 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         /// <response code="200">When the door is successfully opened</response>
         /// <response code="401">If JWT token provided is invalid.</response>
         /// <response code="403">If caller does not have the permission to open door.</response>
-        [HttpPost("open/{doorId}")]
+        [HttpPost("{doorId}/access-requests")]
         [Authorize]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]

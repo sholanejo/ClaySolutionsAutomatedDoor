@@ -21,7 +21,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands
         public async Task<BaseResponse> Handle(UpdateUserDoorAccessControlGroupCommand request, CancellationToken cancellationToken)
         {
             var newAccessControlGroup = await _UnitOfWorkRepository.DoorAccessControlGroupRepository
-                .GetByIdAsync(request.NewAccessControlGroupId);
+                .GetByIdAsync(request.NewAccessControlGroupId, cancellationToken);
 
             if (newAccessControlGroup == null)
             {
@@ -41,7 +41,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands
 
             applicationUser.DoorAccessControlGroupId = request.NewAccessControlGroupId;
             await _userManager.UpdateAsync(applicationUser);
-            await _UnitOfWorkRepository.CommitAsync();
+            await _UnitOfWorkRepository.CommitAsync(cancellationToken);
 
             return BaseResponse.PassedResponse(Constants.ApiOkMessage, StatusCodes.Status200OK);
         }

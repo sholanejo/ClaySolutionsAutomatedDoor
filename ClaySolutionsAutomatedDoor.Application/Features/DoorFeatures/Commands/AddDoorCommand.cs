@@ -22,7 +22,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.DoorFeatures.Commands
         {
             var door = await _unitOfWorkRepository
                 .DoorRepository
-                .GetSingleAsync(x => x.Name.ToLower() == request.DoorName.ToLower());
+                .GetSingleAsync(x => x.Name.ToLower() == request.DoorName.ToLower(), cancellationToken);
 
             if (door is not null)
             {
@@ -31,13 +31,13 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.DoorFeatures.Commands
             }
 
             var newDoor = _BuildDoor(request);
-            await _unitOfWorkRepository.DoorRepository.InsertAsync(newDoor);
+            await _unitOfWorkRepository.DoorRepository.InsertAsync(newDoor, cancellationToken);
 
             var notes = string.Format(Constants.AddDoorMessage, request.DoorName);
             var auditTrail = _BuildAuditTrail(notes, request.CreatedBy);
-            await _unitOfWorkRepository.AuditTrailRepository.InsertAsync(auditTrail);
+            await _unitOfWorkRepository.AuditTrailRepository.InsertAsync(auditTrail, cancellationToken);
 
-            await _unitOfWorkRepository.CommitAsync();
+            await _unitOfWorkRepository.CommitAsync(cancellationToken);
 
             return BaseResponse.PassedResponse(Constants.ApiOkMessage, StatusCodes.Status201Created);
         }

@@ -5,6 +5,7 @@ using ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands;
 using ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Query;
 using ClaySolutionsAutomatedDoor.Application.Features.DoorAccessControlFeatures.Commands;
 using ClaySolutionsAutomatedDoor.Domain.Dtos;
+using ClaySolutionsAutomatedDoor.Domain.Dtos.Requests;
 using ClaySolutionsAutomatedDoor.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -108,40 +109,28 @@ namespace ClaySolutionsAutomatedDoor.API.Controllers
         }
 
         /// <summary>
-        /// Deactivate User
+        /// Updates the active status of a user
         /// </summary>
         /// <returns></returns>
-        /// <response code="200">When the user is successfully deactivated</response>
+        /// <response code="200">When the user status is successfully updated</response>
         /// <response code="401">If JWT token provided is invalid.</response>
-        /// <response code="403">If caller does not have permission to deactivate user.</response>
-        [HttpPatch("users/{userId}/deactivate")]
+        /// <response code="403">If caller does not have permission to change user status.</response>
+        [HttpPatch("users/{userId}/status")]
         [Authorize(Policy = "CanChangeUserActiveState")]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
-        public async Task<ActionResult> DeActivateUser([FromRoute] Guid userId)
+        public async Task<ActionResult> UpdateUserStatus([FromRoute] Guid userId, [FromBody] UpdateUserStatusDto request)
         {
-            var command = new DeActivateUserCommand { UserId = userId };
-            var result = await _sender.Send(command);
-            return StatusCode(result.StatusCode, result);
-        }
+            if (request.IsActive)
+            {
+                var activateCommand = new ActivateUserCommand { UserId = userId };
+                var activateResult = await _sender.Send(activateCommand);
+                return StatusCode(activateResult.StatusCode, activateResult);
+            }
 
-        /// <summary>
-        /// Activate User
-        /// </summary>
-        /// <returns></returns>
-        /// <response code="200">When the user is successfully activated</response>
-        /// <response code="401">If JWT token provided is invalid.</response>
-        /// <response code="403">If caller does not have permission to activate user.</response>
-        [HttpPatch("users/{userId}/activate")]
-        [Authorize(Policy = "CanChangeUserActiveState")]
-        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Unauthorized)]
-        [ProducesResponseType(typeof(BaseResponse), (int)HttpStatusCode.Forbidden)]
-        public async Task<ActionResult> ActivateUser([FromRoute] Guid userId)
-        {
-            var command = new ActivateUserCommand { UserId = userId };
-            var result = await _sender.Send(command);
+            var deactivateCommand = new DeActivateUserCommand { UserId = userId };
+            var result = await _sender.Send(deactivateCommand);
             return StatusCode(result.StatusCode, result);
         }
 

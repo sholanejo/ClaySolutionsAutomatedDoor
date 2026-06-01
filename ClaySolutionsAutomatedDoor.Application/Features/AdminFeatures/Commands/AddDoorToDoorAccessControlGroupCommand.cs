@@ -19,14 +19,14 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands
     {
         public async Task<BaseResponse> Handle(AddDoorToDoorAccessControlGroupCommand request, CancellationToken cancellationToken)
         {
-            var doorAccessControlGroup = await _unitOfWorkRepository.DoorAccessControlGroupRepository.GetByIdAsync(request.DoorAccessControlGroupId);
+            var doorAccessControlGroup = await _unitOfWorkRepository.DoorAccessControlGroupRepository.GetByIdAsync(request.DoorAccessControlGroupId, cancellationToken);
             if (doorAccessControlGroup is null)
             {
                 _logger.LogWarning("Door access control group with Id {0} was not found", request.DoorAccessControlGroupId);
                 return BaseResponse.FailedResponse(Constants.DoorAccessControlGroupNotFoundMessage, StatusCodes.Status400BadRequest);
             }
 
-            var door = await _unitOfWorkRepository.DoorRepository.GetByIdAsync(request.DoorId);
+            var door = await _unitOfWorkRepository.DoorRepository.GetByIdAsync(request.DoorId, cancellationToken);
             if (door is null)
             {
                 _logger.LogWarning("Door with Id {0} was not found", request.DoorId);
@@ -35,7 +35,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands
 
             var doorAlreadyExistinGroup = await _unitOfWorkRepository
                 .DoorPermissionRepository
-                .GetSingleAsync(x => x.DoorId.Equals(request.DoorId) && x.DoorAccessControlGroupId.Equals(request.DoorAccessControlGroupId));
+                .GetSingleAsync(x => x.DoorId.Equals(request.DoorId) && x.DoorAccessControlGroupId.Equals(request.DoorAccessControlGroupId), cancellationToken);
             if (doorAlreadyExistinGroup is not null)
             {
                 _logger.LogWarning("Cannot add an already added door to group");
@@ -43,13 +43,13 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands
             }
 
             DoorPermission doorPermission = _BuildDoorPermissionObject(request);
-            await _unitOfWorkRepository.DoorPermissionRepository.InsertAsync(doorPermission);
+            await _unitOfWorkRepository.DoorPermissionRepository.InsertAsync(doorPermission, cancellationToken);
 
             var notes = string.Format(Constants.DoorAddedToGroupMessage, doorAccessControlGroup.GroupName);
             AuditTrail auditTrail = _BuildAuditTrail(notes, request.CreatedBy);
-            await _unitOfWorkRepository.AuditTrailRepository.InsertAsync(auditTrail);
+            await _unitOfWorkRepository.AuditTrailRepository.InsertAsync(auditTrail, cancellationToken);
 
-            await _unitOfWorkRepository.CommitAsync();
+            await _unitOfWorkRepository.CommitAsync(cancellationToken);
 
             return BaseResponse.PassedResponse(string.Format(Constants.DoorAddedToGroupMessage, doorAccessControlGroup.GroupName), StatusCodes.Status201Created);
         }

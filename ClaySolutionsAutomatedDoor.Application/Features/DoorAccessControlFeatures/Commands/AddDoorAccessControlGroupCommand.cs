@@ -20,7 +20,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.DoorAccessControlFeatu
         {
             var doorAccessControlGroup = await _unitOfWorkRepository
                 .DoorAccessControlGroupRepository
-                .GetSingleAsync(x => x.GroupName.ToLower().Equals(request.GroupName));
+                .GetSingleAsync(x => x.GroupName.ToLower().Equals(request.GroupName), cancellationToken);
             if (doorAccessControlGroup is not null)
             {
                 _logger.LogWarning("Door Access control group cannot be added because the name : {0} already exists", request.GroupName);
@@ -28,13 +28,13 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.DoorAccessControlFeatu
             }
 
             var newDoorAccessControlGroup = _BuildDoorAccessControlGroup(request);
-            await _unitOfWorkRepository.DoorAccessControlGroupRepository.InsertAsync(newDoorAccessControlGroup);
+            await _unitOfWorkRepository.DoorAccessControlGroupRepository.InsertAsync(newDoorAccessControlGroup, cancellationToken);
 
             var notes = string.Format(Constants.DoorAccessGroupActivityMessage, request.GroupName);
             var auditTrail = _BuildAuditTrail(notes, request.ActorId);
-            await _unitOfWorkRepository.AuditTrailRepository.InsertAsync(auditTrail);
+            await _unitOfWorkRepository.AuditTrailRepository.InsertAsync(auditTrail, cancellationToken);
 
-            await _unitOfWorkRepository.CommitAsync();
+            await _unitOfWorkRepository.CommitAsync(cancellationToken);
 
             _logger.LogInformation("Access group with name : {0} was successfully added", request.GroupName);
 

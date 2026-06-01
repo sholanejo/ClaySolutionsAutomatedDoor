@@ -28,7 +28,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.DoorFeatures.Commands
                 return BaseResponse.FailedResponse(Constants.UserDoesNotExistMessage, StatusCodes.Status400BadRequest);
             }
 
-            var door = await _unitOfWorkRepository.DoorRepository.GetByIdAsync(request.DoorId);
+            var door = await _unitOfWorkRepository.DoorRepository.GetByIdAsync(request.DoorId, cancellationToken);
             if (door is null)
             {
                 _logger.LogWarning(Constants.DoorDoesNotExistMessage);
@@ -37,8 +37,9 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.DoorFeatures.Commands
 
             var doorPermission = await _unitOfWorkRepository
                 .DoorPermissionRepository
-                .GetSingleAsync
-                (x => x.DoorAccessControlGroupId == applicationUser.DoorAccessControlGroupId && x.DoorId == request.DoorId);
+                .GetSingleAsync(
+                    x => x.DoorAccessControlGroupId == applicationUser.DoorAccessControlGroupId && x.DoorId == request.DoorId,
+                    cancellationToken);
 
             if (doorPermission is null)
             {
@@ -49,8 +50,8 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.DoorFeatures.Commands
                     PerformedBy = request.UserId,
                 };
 
-                await _unitOfWorkRepository.AuditTrailRepository.InsertAsync(auditTrail);
-                await _unitOfWorkRepository.CommitAsync();
+                await _unitOfWorkRepository.AuditTrailRepository.InsertAsync(auditTrail, cancellationToken);
+                await _unitOfWorkRepository.CommitAsync(cancellationToken);
 
                 return BaseResponse.FailedResponse(Constants.AttemptToOpenUnassignedDoor, StatusCodes.Status403Forbidden);
             }
@@ -62,8 +63,8 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.DoorFeatures.Commands
                 PerformedBy = request.UserId,
             };
 
-            await _unitOfWorkRepository.AuditTrailRepository.InsertAsync(auditTrailSuccess);
-            await _unitOfWorkRepository.CommitAsync();
+            await _unitOfWorkRepository.AuditTrailRepository.InsertAsync(auditTrailSuccess, cancellationToken);
+            await _unitOfWorkRepository.CommitAsync(cancellationToken);
 
             return BaseResponse.PassedResponse(string.Format(Constants.OpenDoorSuccessMessage, door.Name), StatusCodes.Status200OK);
         }

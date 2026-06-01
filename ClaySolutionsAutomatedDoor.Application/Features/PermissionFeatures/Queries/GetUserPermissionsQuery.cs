@@ -41,7 +41,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.PermissionFeatures.Que
                 var identityRole = await _roleManager.FindByNameAsync(role);
                 if (identityRole != null)
                 {
-                    roleClaims = _roleManager.GetClaimsAsync(identityRole).Result.ToList();
+                    roleClaims = (await _roleManager.GetClaimsAsync(identityRole)).ToList();
                     allClaims.AddRange(roleClaims);
                 }
             }

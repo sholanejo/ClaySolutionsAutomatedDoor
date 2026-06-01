@@ -47,7 +47,7 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands
                 return BaseResponse.FailedResponse(Constants.UserAlreadyExistsMessage, StatusCodes.Status409Conflict);
             }
 
-            var doorControlAccessGroup = await _unitOfWorkRepository.DoorAccessControlGroupRepository.GetByIdAsync(request.DoorAccessControlGroupId);
+            var doorControlAccessGroup = await _unitOfWorkRepository.DoorAccessControlGroupRepository.GetByIdAsync(request.DoorAccessControlGroupId, cancellationToken);
             if (doorControlAccessGroup is null)
             {
                 _logger.LogWarning("Door access control group with id {0} was not found", request.DoorAccessControlGroupId);
@@ -71,8 +71,8 @@ namespace ClaySolutionsAutomatedDoor.Application.Features.AdminFeatures.Commands
             }
 
             await _userManager.AddToRoleAsync(newUser, Roles.RegularUser.ToString());
-            await _unitOfWorkRepository.AuditTrailRepository.InsertAsync(auditTrail);
-            await _unitOfWorkRepository.CommitAsync();
+            await _unitOfWorkRepository.AuditTrailRepository.InsertAsync(auditTrail, cancellationToken);
+            await _unitOfWorkRepository.CommitAsync(cancellationToken);
 
             scope.Complete();
 

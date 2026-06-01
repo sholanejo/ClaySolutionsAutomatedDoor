@@ -10,6 +10,6 @@
 
         public IDoorRepository DoorRepository { get; }
 
-        Task<bool> CommitAsync();
+        Task<bool> CommitAsync(CancellationToken cancellationToken = default);
     }
 }

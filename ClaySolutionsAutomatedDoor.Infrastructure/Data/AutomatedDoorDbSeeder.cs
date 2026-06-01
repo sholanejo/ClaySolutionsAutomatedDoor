@@ -23,6 +23,7 @@ namespace ClaySolutionsAutomatedDoor.Infrastructure.Data
                 await AddDefaultUsers.AddEmployeeAsync(userManager, roleManager);
                 await AddDefaultUsers.AddOfficeManagerAsync(userManager, roleManager);
                 await AddDefaultUsers.AddDirectorAsync(userManager, roleManager);
+                await AddDefaultUsers.AddDefaultDoorsAndPermissionsAsync(dbContext);
 
                 Log.Logger.Information("Data seeding completed successfully...");
             }
